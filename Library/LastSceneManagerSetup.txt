@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/HelloARCloud/Scenes/HelloARCloud.unity
+- path: Assets/ARCloud/Scenes/HelloARCloud.unity
   isLoaded: 1
   isActive: 1
