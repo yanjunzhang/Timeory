@@ -43,7 +43,7 @@ public class MgrLevel : MonoBehaviour {
     void OnLevelLoaded(Scene scene, LoadSceneMode mode = LoadSceneMode.Single)
     {
         App.MgrTool.YieldMethod( 0.3f , ( ) => { m_Loading = false; } );
-        Caching.CleanCache( );
+        Caching.ClearCache();
         Resources.UnloadUnusedAssets( );
         System.GC.Collect( );
     }
