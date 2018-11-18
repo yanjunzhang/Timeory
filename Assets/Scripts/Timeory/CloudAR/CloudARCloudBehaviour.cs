@@ -61,7 +61,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 			Debug.Log("metaUrl:" + s);
 			//创建ImageTarget
 			uids.Add(imageTarget.Uid);
-
+			//从后台获取数据
 		}
 	}
 	string MetaToString(string meta)
@@ -93,7 +93,5 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 		gameObj.transform.SetParent(manager.transform);
 
 		var targetBehaviour = gameObj.AddComponent<CloudARVideoTargetBehaviour>();
-
-
 	}
 }
