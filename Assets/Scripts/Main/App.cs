@@ -15,10 +15,9 @@ public class App : MonoBehaviour
 
 	public AssetType _AssetType;
 
-	public int _AppID;
-	public string _ProductID;
-	public string m_key = "";
-	public string _GooglePlayID = "";
+	public string _key;
+	public string _Server;
+	public string m_Secret;
 
 
 	#endregion
