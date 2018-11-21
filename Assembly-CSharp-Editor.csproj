@@ -150,6 +150,12 @@
  <Reference Include="LitJson">
  <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Plugins/LitJson/LitJson.dll</HintPath>
  </Reference>
+ <Reference Include="DOTween">
+ <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTweenEditor">
+ <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Users/zhangyanjun/Library/Unity/cache/packages/packages.unity.com/com.unity.ads@1.0.7/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -164,15 +170,6 @@
  </Reference>
  <Reference Include="UnityEditor.Purchasing">
  <HintPath>/Users/zhangyanjun/Library/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
- </Reference>
- <Reference Include="DOTweenUpgradeManager">
- <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Demigiant/DOTween/Editor/DOTweenUpgradeManager.dll</HintPath>
- </Reference>
- <Reference Include="DOTweenEditor">
- <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
- </Reference>
- <Reference Include="DOTween">
- <HintPath>/Users/zhangyanjun/Documents/Github/Timeory/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
