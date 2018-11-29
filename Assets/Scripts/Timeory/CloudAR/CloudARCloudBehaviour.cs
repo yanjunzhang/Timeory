@@ -10,7 +10,6 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 	private List<string> uids = new List<string>();
 	private ImageTrackerBaseBehaviour trackerBehaviour;
 	private string persistentDataPath;
-	public bool isTimeory;
 	public bool SaveNewTarget;
 	public GameObject manager;
 
@@ -56,12 +55,14 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 				continue;
 
 			Debug.Log("New Cloud Target.uid: " + imageTarget.Uid + "(imageTarget.Name：" + imageTarget.Name + ")" + "(imageTarget.MetaData:" + imageTarget.MetaData + ")");
-			byte[] bytes = Convert.FromBase64String(imageTarget.MetaData);
-			string s = System.Text.Encoding.GetEncoding("utf-8").GetString(bytes);
-			Debug.Log("metaUrl:" + s);
+			//byte[] bytes = Convert.FromBase64String(imageTarget.MetaData);
+			//string s = System.Text.Encoding.GetEncoding("utf-8").GetString(bytes);
+			//Debug.Log("metaUrl:" + s);
 			//创建ImageTarget
 			uids.Add(imageTarget.Uid);
+
 			//从后台获取数据
+			App.MgrPost.Load(imageTarget,InitVideoCardTarget);
 		}
 	}
 	string MetaToString(string meta)
@@ -73,25 +74,21 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 		
 
 
-	#region imageTarget事件
-	void OnVideoTargetFound(TargetAbstractBehaviour behaviour)
+	//初始化视频
+	void InitVideoCardTarget(ImageTarget imageTarget,VideoTargetDate data)
 	{
+		//var gameObj = new GameObject(imageTarget.Name);
+		//gameObj.transform.SetParent(manager.transform);
+		GameObject _gameObj = new GameObject(imageTarget.Name);
+		var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
+		if (!targetBehaviour.SetupWithTarget(imageTarget))
+			return;
+		targetBehaviour.Bind(trackerBehaviour);
+		App.MgrPrefab.Create (_gameObj,"VideoTarget", Vector3.zero, (gameObj)=>{
+			
+			gameObj.GetComponentInChildren<VideoTargetController> ().Init (data);
+		});
 
-	}
-	void OnVideoTargetLost(TargetAbstractBehaviour behaviour)
-	{
 
-	}
-
-	#endregion
-
-
-	//初始化带视频带宣传单页
-	void InitVideoCardTarget(ImageTarget imageTarget)
-	{
-		var gameObj = new GameObject(imageTarget.Name);
-		gameObj.transform.SetParent(manager.transform);
-
-		var targetBehaviour = gameObj.AddComponent<CloudARVideoTargetBehaviour>();
 	}
 }

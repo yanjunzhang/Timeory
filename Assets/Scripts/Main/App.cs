@@ -46,6 +46,7 @@ public class App : MonoBehaviour
 	private static MgrPrefab m_MgrPrefab;
 	private static MgrLevel m_MgrLevel;
 	private static MgrPost m_MgrPost;
+    private static MgrDownload m_MgrDownload;
 
 	public static MgrPost MgrPost {
 		get {
@@ -95,10 +96,18 @@ public class App : MonoBehaviour
 			return m_MgrLevel;
 		}
 	}
+    public static MgrDownload MgrDownload
+    {
+        get
+        {
+            CheckPreExist();
+            return m_MgrDownload;
+        }
+    }
 
 
-	#region Mono
-	void Awake ()
+    #region Mono
+    void Awake ()
 	{
 		if (!m_App) {
 			m_App = this;
@@ -112,19 +121,6 @@ public class App : MonoBehaviour
 
 	void Start ()
 	{
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (_ExportType == ExportType.GoogleFree) {
-		App.MgrUnlock.InitGoogleData();
-		}
-		#endif
-
-		#if UNITY_IOS
-		if (Application.internetReachability != NetworkReachability.NotReachable) {
-		App.MgrUnlock.GetProduct (_ProductID);
-		}
-		#endif
-
 
 	}
 
@@ -161,7 +157,8 @@ public class App : MonoBehaviour
 		m_MgrPrefab = CreateMgr<MgrPrefab> (gameObject);
 		m_MgrLevel = CreateMgr<MgrLevel> (gameObject);
 		m_MgrPost = CreateMgr<MgrPost> (gameObject);
-	}
+        m_MgrDownload= CreateMgr<MgrDownload>(gameObject);
+    }
 
 	private T CreateMgr<T> (GameObject parent) where T : Component
 	{
