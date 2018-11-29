@@ -13,4 +13,6 @@ public class CloudARManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    //加载多个videoTarget
 }
