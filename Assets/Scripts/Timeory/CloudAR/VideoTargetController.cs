@@ -100,7 +100,16 @@ public class VideoTargetController : MonoBehaviour {
     {
         //ARCardTarget = transform.parent;
     }
-
+    void Update()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit) && Input.GetMouseButtonDown(0))
+        {
+            //单击
+            PlayVideo();
+        }
+    }
     public void SetVideoPath(string path)
     {
         //path = GetComponent<VideoDownloader>().GetVideoPath(path);
@@ -110,7 +119,7 @@ public class VideoTargetController : MonoBehaviour {
 		vPlayer.Open();
 		vPlayer.VideoReadyEvent += (sender,e) => {
 			Debug.Log("ready");
-
+            //激活视频collider（允许点击暂停）
 			vPlayer.Play();
 		};
     }
@@ -177,12 +186,14 @@ public class VideoTargetController : MonoBehaviour {
     //播放视频
     void PlayVideo()
     {
-		
+		//隐藏播放icon
+        //激活视频collider
     }
     //暂停视频
     void PauseVideo()
     {
-
+        //显示播放icon
+        //关闭视频collider
     }
     //全屏播放
     public void PlayOnPhonePlayer()
