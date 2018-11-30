@@ -27,15 +27,20 @@ public struct VideoTargetDate
 }
 public struct VideoTargetCell
 {
-	public VideoTargetCell(string createDate,string timeLineId,string timeVideoSrc)
+	public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo)
 	{
 		this.createDate = createDate;
-		this.timeLineId = timeLineId;
 		this.timeVideoSrc = timeVideoSrc;
+        this.nickName = nickName;
+        this.userlogo = userlogo;
+
+        this.timeLineId = "";
 	}
     public string createDate;
     public string timeLineId;
     public string timeVideoSrc;
+    public string nickName;
+    public string userlogo;
 }
 
 
@@ -69,15 +74,16 @@ public class VideoTargetController : MonoBehaviour {
 		}
 	}
 	public int selectedNumber;
-	public Transform backBtn, nextBtn;
+	public Transform backBtn, nextBtn,playBtn;
+    public Collider videoCollider;
     //public Transform ARCardTarget;
     [HideInInspector]
     public EasyAR.VideoPlayerBehaviour vPlayer;
     //public GameObject playImage;
     //public RectTransform background;
-    public Image head;
-    public Text nickName;
-    public Text date;
+    public Image ui_userlogo;
+    public Text ui_nickName;
+    public Text ui_date;
     bool isPlaying = true;
 	bool isPlaneMode=true;
 	CloudARVideoTargetBehaviour videoTargetBehaviour;
@@ -113,15 +119,12 @@ public class VideoTargetController : MonoBehaviour {
     public void SetVideoPath(string path)
     {
         //path = GetComponent<VideoDownloader>().GetVideoPath(path);
+        path = App.MgrDownload.GetVideoPath(path);
         vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();
 
         vPlayer.Path = path;
 		vPlayer.Open();
-		vPlayer.VideoReadyEvent += (sender,e) => {
-			Debug.Log("ready");
-            //激活视频collider（允许点击暂停）
-			vPlayer.Play();
-		};
+		
     }
 	public void ResetPlaneRotation()
 	{
@@ -138,8 +141,26 @@ public class VideoTargetController : MonoBehaviour {
 		transform.localScale = Vector3.one;
 		vPlayer.transform.rotation=Quaternion.Euler(new Vector3(180f,0,0));
 		RefreshUI ();
+        //准备完后自动播放
+        vPlayer.VideoReadyEvent += (sender, e) => {
+            Debug.Log("ready");
+            //激活视频collider（允许点击暂停）
+            videoCollider.enabled = true;
+            vPlayer.Play();
+        };
+        //播放结束后暂停
+        vPlayer.VideoReachEndEvent += (sender, e) => {
+            Debug.Log("reachEnd");
+            PauseVideo();
+        };
     }
-		
+
+    public void UpdateData(VideoTargetDate data)
+    {
+        m_data = data;
+        this.selectedNumber = 0;
+        RefreshUI();
+    }
 
     //下一个视频
     public void OnNextBtnClick()
@@ -175,8 +196,12 @@ public class VideoTargetController : MonoBehaviour {
 		}
 		//更新用户信息
 		Debug.Log("当前选择： "+selectedNumber);
-		//切换视频
-		SetVideoPath (m_data.videoList[selectedNumber].timeVideoSrc);
+        VideoTargetCell currCell = m_data.videoList[selectedNumber];
+        ui_date.text = currCell.createDate;
+        ui_nickName.text = currCell.nickName;
+        App.MgrDownload.LoadImageWithUrl(ui_userlogo, currCell.timeVideoSrc);
+        //切换视频
+        SetVideoPath (currCell.timeVideoSrc);
     }
 	void SetArrowBtn(bool back,bool next)
 	{
@@ -186,14 +211,22 @@ public class VideoTargetController : MonoBehaviour {
     //播放视频
     void PlayVideo()
     {
-		//隐藏播放icon
+        //隐藏播放icon
+        playBtn.gameObject.SetActive(false);
         //激活视频collider
+        videoCollider.enabled = true;
+        //继续视频
+        vPlayer.Play();
     }
     //暂停视频
     void PauseVideo()
     {
         //显示播放icon
+        playBtn.gameObject.SetActive(true);
         //关闭视频collider
+        videoCollider.enabled = false;
+        //暂停视频
+        vPlayer.Pause();
     }
     //全屏播放
     public void PlayOnPhonePlayer()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
 
 public class MgrDownload : MonoBehaviour {
     public bool useMinimumPic=true;
@@ -23,11 +24,11 @@ public class MgrDownload : MonoBehaviour {
 		
 	}
 
-    public void LoadSpriteWithUrl(SpriteRenderer sr, string url)
+    public void LoadImageWithUrl(Image image, string url)
     {
-        StartCoroutine(IE_LoadSpriteWithUrl(sr, url));
+        StartCoroutine(IE_LoadImageWithUrl(image, url));
     }
-    IEnumerator IE_LoadSpriteWithUrl(SpriteRenderer sr, string url)
+    IEnumerator IE_LoadImageWithUrl(Image image, string url)
     {
         string fileName = url.Remove(0, url.Length - 40);
         if (useMinimumPic)
@@ -46,7 +47,7 @@ public class MgrDownload : MonoBehaviour {
             {
                 Texture2D tex2d = www.texture;
                 Sprite s = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0.5f, 0.5f));
-                sr.sprite = s;
+                image.sprite = s;
             }
             yield break;
         }
@@ -65,7 +66,7 @@ public class MgrDownload : MonoBehaviour {
                 Debug.Log("error:" + www2.error);
             }
             Texture2D newTexture = www2.texture;
-            sr.sprite = Sprite.Create(newTexture, new Rect(0, 0, newTexture.width, newTexture.height), new Vector2(0.5f, 0.5f));
+            image.sprite = Sprite.Create(newTexture, new Rect(0, 0, newTexture.width, newTexture.height), new Vector2(0.5f, 0.5f));
             byte[] pngData = newTexture.EncodeToPNG();
             try
             {

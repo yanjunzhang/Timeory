@@ -66,8 +66,9 @@ public class MgrPost : MonoBehaviour {
 			for (int i = 0; i < jd.Count; i++) {
 				VideoTargetCell cell = new VideoTargetCell (
 					                       jd [i] ["createDate"].ToString (),
-					                       jd [i] ["timeLineId"].ToString (),
-					                       jd [i] ["timeVideoSrc"].ToString ());
+					                       jd [i] ["user"]["nickName"].ToString (),
+					                       jd [i] ["timeVideoSrc"].ToString (),
+                                           jd [i] ["user"]["userLogo"].ToString());
 				data.videoList.Add (cell);
 			}
 

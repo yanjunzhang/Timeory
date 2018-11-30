@@ -7,11 +7,11 @@ public class QuitApp : MonoBehaviour {
     {
         Defult,
         Quit,
-        Title
+        ClearTarget
     }
 
     [SerializeField]
-    private BackType _BackType = BackType.Title;
+    private BackType _BackType = BackType.Defult;
 #if UNITY_ANDROID && !UNITY_EDITOR
 	void Update () {
 
