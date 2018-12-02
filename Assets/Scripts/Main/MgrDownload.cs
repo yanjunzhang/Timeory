@@ -5,13 +5,14 @@ using System.IO;
 using UnityEngine.UI;
 
 public class MgrDownload : MonoBehaviour {
-    public bool useMinimumPic=true;
+    public bool useMinimumPic=false;
 
     List<string> downloadList;
     string path;
 	void Awake()
 	{
-        path = Application.persistentDataPath;
+        //path = Application.persistentDataPath;
+        path = "sdcard/timeory/unity/video";
     }
 	// Use this for initialization
 	void Start () {
@@ -21,8 +22,57 @@ public class MgrDownload : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            DownloadLocalARImg("http://oss.timeory.com/Business/App/Scan/Img/ar1.jpg");
+        }
+    }
+
+    public void DownloadLocalARImg(string url)
+    {
+        StartCoroutine((IE_DownloadLocalARImg(url)));
+    }
+    IEnumerator IE_DownloadLocalARImg(string url)
+    {
+        string[] splits = url.Split('/');
+        string fileName = splits[splits.Length - 1];
+            //url.Remove(0, url.Length - 40);
+        path = Application.streamingAssetsPath;
+        if (File.Exists(path + "/" + fileName))
+        {
+            yield break;
+        }
+        else
+        {
+            if (downloadList.Contains(fileName))
+            {
+                yield break;
+            }
+            downloadList.Add(fileName);
+            WWW www2 = new WWW(url);
+            //定义www为WWW类型并且等于所下载下来的WWW中内容。  
+            yield return www2;
+            //返回所下载的www的值   
+            if (www2.error != null)
+            {
+                Debug.Log("error:" + www2.error);
+            }
+            Texture2D newTexture = www2.texture;
+
+            byte[] pngData = newTexture.EncodeToPNG();
+            try
+            {
+                File.WriteAllBytes(path + "/" + fileName, pngData);
+                Debug.Log(path + "/" + fileName);
+            }
+            catch (IOException e)
+            {
+                print(e);
+            }
+
+            downloadList.Remove(fileName);
+        }
+    }
 
     public void LoadImageWithUrl(Image image, string url)
     {
@@ -33,9 +83,11 @@ public class MgrDownload : MonoBehaviour {
         string fileName = url.Remove(0, url.Length - 40);
         if (useMinimumPic)
             fileName += "!unity";
+        
         if (File.Exists(path + "/" + fileName))
         {
-            WWW www = new WWW("file://" + path + "/" + fileName);
+            WWW www = new WWW(path + "/" + fileName);
+            Debug.Log("file://" + path + "/" + fileName);
             yield return www;
 
             if (www.error != null)
@@ -71,6 +123,7 @@ public class MgrDownload : MonoBehaviour {
             try
             {
                 File.WriteAllBytes(path + "/" + fileName, pngData);
+                Debug.Log(path + "/" + fileName);
             }
             catch (IOException e)
             {
@@ -90,12 +143,15 @@ public class MgrDownload : MonoBehaviour {
 		if (File.Exists(videoPath)) {
 			if(Application.platform==RuntimePlatform.Android)
 			{
-				return videoPath;
+                GameObject.FindObjectOfType<UIManager>().DebugToUI("file Exists"+videoPath);
+                Debug.Log(videoPath);
+                return videoPath;
 			}else if(Application.platform==RuntimePlatform.IPhonePlayer)
 			{
 				return "file://"+videoPath;
-			}else
-				return "file://"+videoPath;
+            }else{
+                return "file://" + videoPath;
+            }
 		}else
 		{
             StartCoroutine(SaveMp4(videoPath));
@@ -112,6 +168,7 @@ public class MgrDownload : MonoBehaviour {
         }
         
 		if (File.Exists(path + "/"+fileName)) {
+            GameObject.FindObjectOfType<UIManager>().DebugToUI("file Exists");
 			yield break;
 		}
         downloadList.Add(fileName);
@@ -130,6 +187,7 @@ public class MgrDownload : MonoBehaviour {
 		try  
 		{  
 			File.WriteAllBytes(path + "/"+fileName,www2.bytes);  
+            GameObject.FindObjectOfType<UIManager>().DebugToUI("file downloaded"+path + "/" + fileName);
 			Debug.Log(path + "/"+fileName);
             downloadList.Remove(fileName);
         }  

@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour {
     public Transform cantAddVideoPanel;
     public Transform addFriendSuccess;
     public CloudARManager m_manager;
-
+    public UnityEngine.UI.Text debugPanel;
     bool isFlashOpen;
 	// Use this for initialization
 	void Start () {
@@ -20,7 +20,11 @@ public class UIManager : MonoBehaviour {
     {
 
     }
-
+    public void DebugToUI(string str)
+    {
+        debugPanel.text += str;
+        debugPanel.text += " | ";
+    }
     //打开密码
     public void OnPasswordBtnClick()
     {

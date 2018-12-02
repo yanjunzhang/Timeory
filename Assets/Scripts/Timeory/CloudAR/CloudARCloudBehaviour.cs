@@ -79,7 +79,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 	{
 		//var gameObj = new GameObject(imageTarget.Name);
 		//gameObj.transform.SetParent(manager.transform);
-		GameObject _gameObj = new GameObject(imageTarget.Name);
+        GameObject _gameObj = new GameObject(imageTarget.Uid);
 		var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
 		if (!targetBehaviour.SetupWithTarget(imageTarget))
 			return;

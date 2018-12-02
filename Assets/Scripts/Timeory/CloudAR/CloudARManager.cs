@@ -16,29 +16,41 @@ public class CloudARManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        
+    }
 
     //手动加载videoTarget
     public void LoadLocalTarget()
     {
         //关闭云识别
 
-        CloudARVideoTargetBehaviour targetBehaviour;
-        ImageTrackerBehaviour tracker = FindObjectOfType<ImageTrackerBehaviour>();
-
-        // dynamically load from image (*.jpg, *.png)
-        CreateTarget("argame01", out targetBehaviour);
-        targetBehaviour.Bind(tracker);
-        targetBehaviour.SetupWithImage("sightplus/argame01.jpg", StorageType.Assets, "argame01", new Vector2());
-        GameObject duck02_1 = Instantiate(Resources.Load("duck02")) as GameObject;
-        duck02_1.transform.parent = targetBehaviour.gameObject.transform;
+        App.MgrPost.LoadLocalTarget("pwd", InitLocalVideoCardTarget, ErrorPassword);
     }
 
-    void CreateTarget(string targetName, out CloudARVideoTargetBehaviour targetBehaviour)
-        {
-            GameObject Target = new GameObject(targetName);
-            Target.transform.localPosition = Vector3.zero;
-            targetBehaviour = Target.AddComponent<CloudARVideoTargetBehaviour>();
-        }
+
+
+    void ErrorPassword()
+    {
+        //密码错误
+        Debug.Log("密码错误");
+    }
+
+    //初始化本地视频
+    void InitLocalVideoCardTarget(VideoTargetDate data)
+    {
+        //var gameObj = new GameObject(imageTarget.Name);
+        //gameObj.transform.SetParent(manager.transform);
+        ImageTrackerBehaviour tracker = FindObjectOfType<ImageTrackerBehaviour>();
+        GameObject _gameObj = new GameObject("ar1");
+        _gameObj.transform.localPosition = Vector3.zero;
+        var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
+        targetBehaviour.Bind(tracker);
+        targetBehaviour.SetupWithImage("ar1.jpg", StorageType.Assets, "ar1", new Vector2());
+        App.MgrPrefab.Create(_gameObj, "VideoTarget", Vector3.zero, (gameObj) => {
+
+            //gameObj.GetComponentInChildren<VideoTargetController>().Init(data);
+        });
+
+
+    }
 }

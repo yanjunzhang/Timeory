@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public struct VideoTargetDate
 {
-	public VideoTargetDate(string targetId,string timeVideoScr){
+    public VideoTargetDate(string targetId,string timeVideoScr,string timeImgSrc){
 		this.targetId = targetId;
-		this.timeVideoScr = timeVideoScr;
+        this.timeVideoSrc = timeVideoScr;
 		this.userName="";
 		this.createDate = "";
 		this.status = "";
-		this.timeImgScr="";
+        this.timeImgSrc=timeImgSrc;
 		this.videoList = new List<VideoTargetCell> ();
 
 	}
@@ -20,11 +20,12 @@ public struct VideoTargetDate
     public string userName;
 	public string createDate;
 	public string status;
-	public string timeImgScr;
-	public string timeVideoScr;
+    public string timeImgSrc;
+	public string timeVideoSrc;
     public List<VideoTargetCell> videoList;
 
 }
+
 public struct VideoTargetCell
 {
 	public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo)
@@ -75,15 +76,17 @@ public class VideoTargetController : MonoBehaviour {
 	}
 	public int selectedNumber;
 	public Transform backBtn, nextBtn,playBtn;
-    public Collider videoCollider;
+
     //public Transform ARCardTarget;
-    [HideInInspector]
+    //[HideInInspector]
     public EasyAR.VideoPlayerBehaviour vPlayer;
     //public GameObject playImage;
     //public RectTransform background;
     public Image ui_userlogo;
     public Text ui_nickName;
     public Text ui_date;
+
+    Collider videoCollider;
     bool isPlaying = true;
 	bool isPlaneMode=true;
 	CloudARVideoTargetBehaviour videoTargetBehaviour;
@@ -105,6 +108,7 @@ public class VideoTargetController : MonoBehaviour {
     void Awake()
     {
         //ARCardTarget = transform.parent;
+        videoCollider = vPlayer.GetComponent<Collider>();
     }
     void Update()
     {
@@ -113,17 +117,17 @@ public class VideoTargetController : MonoBehaviour {
         if (Physics.Raycast(ray, out hit) && Input.GetMouseButtonDown(0))
         {
             //单击
-            PlayVideo();
+            PauseVideo();
         }
     }
     public void SetVideoPath(string path)
     {
         //path = GetComponent<VideoDownloader>().GetVideoPath(path);
         path = App.MgrDownload.GetVideoPath(path);
-        vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();
-
+        //vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();
         vPlayer.Path = path;
-		vPlayer.Open();
+        vPlayer.Open();
+        PlayVideo();
 		
     }
 	public void ResetPlaneRotation()
@@ -139,20 +143,22 @@ public class VideoTargetController : MonoBehaviour {
 		this.selectedNumber = 0;
 		videoTargetBehaviour = GetComponentInParent<CloudARVideoTargetBehaviour> ();
 		transform.localScale = Vector3.one;
-		vPlayer.transform.rotation=Quaternion.Euler(new Vector3(180f,0,0));
-		RefreshUI ();
+		//vPlayer.transform.rotation=Quaternion.Euler(new Vector3(180f,0,0));
+		
         //准备完后自动播放
         vPlayer.VideoReadyEvent += (sender, e) => {
-            Debug.Log("ready");
+            GameObject.FindObjectOfType<UIManager>().DebugToUI("ready");
             //激活视频collider（允许点击暂停）
             videoCollider.enabled = true;
             vPlayer.Play();
         };
         //播放结束后暂停
         vPlayer.VideoReachEndEvent += (sender, e) => {
-            Debug.Log("reachEnd");
+            GameObject.FindObjectOfType<UIManager>().DebugToUI("reachEnd");
             PauseVideo();
         };
+        GameObject.FindObjectOfType<UIManager>().DebugToUI("Init");
+        RefreshUI();
     }
 
     public void UpdateData(VideoTargetDate data)
@@ -199,7 +205,7 @@ public class VideoTargetController : MonoBehaviour {
         VideoTargetCell currCell = m_data.videoList[selectedNumber];
         ui_date.text = currCell.createDate;
         ui_nickName.text = currCell.nickName;
-        App.MgrDownload.LoadImageWithUrl(ui_userlogo, currCell.timeVideoSrc);
+        App.MgrDownload.LoadImageWithUrl(ui_userlogo, currCell.userlogo);
         //切换视频
         SetVideoPath (currCell.timeVideoSrc);
     }
@@ -209,7 +215,7 @@ public class VideoTargetController : MonoBehaviour {
 		nextBtn.gameObject.SetActive (next);
 	}
     //播放视频
-    void PlayVideo()
+    public void PlayVideo()
     {
         //隐藏播放icon
         playBtn.gameObject.SetActive(false);
@@ -217,6 +223,7 @@ public class VideoTargetController : MonoBehaviour {
         videoCollider.enabled = true;
         //继续视频
         vPlayer.Play();
+        GameObject.FindObjectOfType<UIManager>().DebugToUI("vplayer Path: "+vPlayer.Path);
     }
     //暂停视频
     void PauseVideo()
@@ -286,16 +293,18 @@ public class VideoTargetController : MonoBehaviour {
     //切换到平面模式
     void TurnPlaneMode()
     {
-        transform.GetChild(0).GetComponent<RectTransform>().DOLocalRotate(new Vector3(90f, 0, 0), 1f);
-        transform.GetChild(1).transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
+        //transform.GetChild(0).GetComponent<RectTransform>().DOLocalRotate(new Vector3(90f, 0, 0), 1f);
+        //vPlayer.transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
+        transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
         transform.localPosition = new Vector3(0, 0, 0);
     }
     //切换到立体模式
     void TurnARMode()
     {
 		transform.localPosition = new Vector3(0, 0, 0);
-        transform.GetChild(0).GetComponent<RectTransform>().DOLocalRotate(new Vector3(19f, 0, 0), 1f);
-        transform.GetChild(1).transform.DOLocalRotate(new Vector3(-71f, 0, 0), 1f);
+        transform.DOLocalRotate(new Vector3(-71f, 0, 0), 1f);
+        //transform.GetChild(0).GetComponent<RectTransform>().DOLocalRotate(new Vector3(19f, 0, 0), 1f);
+        //vPlayer.transform.DOLocalRotate(new Vector3(-71f, 0, 0), 1f);
 
     }
 

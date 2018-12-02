@@ -16,7 +16,64 @@ public class MgrPost : MonoBehaviour {
 	{
 		StartCoroutine (LoadImageTarget (target,handle));
 	}
+
+    public void LoadLocalTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
+    {
+        StartCoroutine(LoadLocalImageTarget(pwd,handle,errorHandle));
+    }
     #region 后台交互   
+
+    IEnumerator LoadLocalImageTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
+    {
+        WWWForm wwwForm = new WWWForm();
+        wwwForm.AddField("password", pwd);
+        WWW www = new WWW("http://106.14.60.213:8080/business/AR/local", wwwForm);
+        yield return www;
+        string m_info = string.Empty;
+
+        if (www.error != null)
+        {
+            m_info = www.error;
+            yield return null;
+        }
+        if (www.isDone && www.error == null)
+        {
+
+            m_info = www.text.ToString();
+            yield return m_info;
+            Debug.Log(m_info);
+
+            JsonData jd = JsonMapper.ToObject(m_info);
+            if (jd["msg"].ToString().Equals("识别成功"))
+            {
+                Debug.Log("密码错误");
+                errorHandle();
+                yield break;
+            }
+
+            //Debug.Log (jd.ToString ());
+            string s = jd["data"]["timesImgSrc"].ToString();
+
+            VideoTargetDate data = new VideoTargetDate(pwd,"", s);
+
+            jd = jd["data"]["timeLineVideoList"];
+            for (int i = 0; i < jd.Count; i++)
+            {
+                VideoTargetCell cell = new VideoTargetCell(
+                                           jd[i]["createDate"].ToString(),
+                                           jd[i]["user"]["nickName"].ToString(),
+                                           jd[i]["timeVideoSrc"].ToString(),
+                                           jd[i]["user"]["userLogo"].ToString());
+                data.videoList.Add(cell);
+            }
+
+            Debug.Log(data.videoList.Count);
+
+            handle(data);
+        }
+
+    }
+
 	//获取该target下的所有用户及视频信息
 	//POST /videos/cloud/targetId/{targetId}/memberCode/{memberCode} 2018-01-22-用户查看云识别时光轴
 	IEnumerator LoadImageTarget(ImageTarget target,System.Action<ImageTarget,VideoTargetDate> handle)
@@ -51,16 +108,15 @@ public class MgrPost : MonoBehaviour {
 		if (www.isDone && www.error == null)
 		{
 
-			//m_info = www.text.ToString();
-			m_info = "{\n    \"code\": 200,\n    \"data\": {\n        \"createDate\": \"2018-11-09 00:00:00\",\n        \"id\": 10063001,\n        \"status\": 1,\n        \"timeLineVideoList\": [\n            {\n                \"createDate\": \"2018-11-09 00:00:00\",\n                \"id\": 10064002,\n                \"timeLineId\": 10063001,\n                \"timeVideoSrc\": \"http://oss.timeory.com/video//ead78d39-dbf7-11e8-8192-00163e00a099.mp4\"\n            },\n            {\n                \"createDate\": \"2018-11-09 00:00:00\",\n                \"id\": 10064002,\n                \"timeLineId\": 10063001,\n                \"timeVideoSrc\": \"http://oss.timeory.com/video//ead78d39-dbf7-11e8-8192-00163e00a099.mp4\"\n            },\n            {\n                \"createDate\": \"2018-11-09 00:00:00\",\n                \"id\": 10064002,\n                \"timeLineId\": 10063001,\n                \"timeVideoSrc\": \"http://oss.timeory.com/video//ead78d39-dbf7-11e8-8192-00163e00a099.mp4\"\n            }\n        ],\n        \"timesImgSrc\": \"http://oss.timeory.com/Business/App/Scan/Img/ar1.jpg\",\n        \"userId\": 710600163\n    },\n    \"msg\": \"识别成功\",\n    \"time\": \"2018-11-25T20:17:39.640\"\n}";
-			yield return m_info;
+			m_info = www.text.ToString();
+            yield return m_info;
 			Debug.Log(m_info);
 			JsonData jd = JsonMapper.ToObject(m_info);
 			jd = jd["data"]["timeLineVideoList"];
 			//Debug.Log (jd.ToString ());
 			byte[] bytes = Convert.FromBase64String(target.MetaData);
 			string s = System.Text.Encoding.GetEncoding("utf-8").GetString(bytes);
-			VideoTargetDate data = new VideoTargetDate (target.Uid,s);
+			VideoTargetDate data = new VideoTargetDate (target.Uid,s,"");
 
 
 			for (int i = 0; i < jd.Count; i++) {
