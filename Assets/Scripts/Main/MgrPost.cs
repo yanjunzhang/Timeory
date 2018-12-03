@@ -25,6 +25,7 @@ public class MgrPost : MonoBehaviour {
 
     IEnumerator LoadLocalImageTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
     {
+        Debug.Log(pwd);
         WWWForm wwwForm = new WWWForm();
         wwwForm.AddField("password", pwd);
         WWW www = new WWW("http://106.14.60.213:8080/business/AR/local", wwwForm);
@@ -44,7 +45,7 @@ public class MgrPost : MonoBehaviour {
             Debug.Log(m_info);
 
             JsonData jd = JsonMapper.ToObject(m_info);
-            if (jd["msg"].ToString().Equals("识别成功"))
+            if (!jd["msg"].ToString().Equals("识别成功"))
             {
                 Debug.Log("密码错误");
                 errorHandle();

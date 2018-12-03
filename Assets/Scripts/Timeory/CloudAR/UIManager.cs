@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using EasyAR;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
     public Transform passwordPanel;
     public Transform passwordBtn;
     public Transform cantAddVideoPanel;
+    public Transform errorPassword;
     public Transform addFriendSuccess;
     public CloudARManager m_manager;
-    public UnityEngine.UI.Text debugPanel;
+    public InputField inputField;
+    public Text debugPanel;
     bool isFlashOpen;
 	// Use this for initialization
 	void Start () {
@@ -45,13 +48,17 @@ public class UIManager : MonoBehaviour {
     //输入密码后的操作
     public void OnPasswordReturn()
     {
-
+        App.MgrPost.LoadLocalTarget(inputField.text,InitLocalVideoCardTarget,ErrorPassword);
+        passwordPanel.gameObject.SetActive(false);
+        passwordBtn.gameObject.SetActive(true);
+        inputField.text = "";
     }
     //输入密码关闭按钮的点击
     public void OnPasswordCloseBtnClick()
     {
         passwordBtn.gameObject.SetActive(true);
         passwordPanel.gameObject.SetActive(false);
+        inputField.text = "";
     }
 
     //显示今日添加视频上限
@@ -71,4 +78,32 @@ public class UIManager : MonoBehaviour {
         addFriendSuccess.DOScale(Vector3.zero, 1f).SetDelay(3f);
     }
 
+
+
+    void ErrorPassword()
+    {
+        //密码错误
+        errorPassword.DOScale(Vector3.one, 1f);
+        errorPassword.DOScale(Vector3.zero, 1f).SetDelay(3f);
+        Debug.Log("密码错误");
+    }
+
+    //初始化本地视频
+    void InitLocalVideoCardTarget(VideoTargetDate data)
+    {
+        //var gameObj = new GameObject(imageTarget.Name);
+        //gameObj.transform.SetParent(manager.transform);
+        ImageTrackerBehaviour tracker = FindObjectOfType<ImageTrackerBehaviour>();
+        GameObject _gameObj = new GameObject("ar1");
+        _gameObj.transform.localPosition = Vector3.zero;
+        var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
+        targetBehaviour.Bind(tracker);
+        targetBehaviour.SetupWithImage("ar1.jpg", StorageType.Assets, "ar1", new Vector2());
+        App.MgrPrefab.Create(_gameObj, "VideoTarget", Vector3.zero, (gameObj) => {
+
+            //gameObj.GetComponentInChildren<VideoTargetController>().Init(data);
+        });
+
+
+    }
 }
