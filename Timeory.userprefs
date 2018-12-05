@@ -1,16 +1,24 @@
 ﻿<Properties StartupConfiguration="{174AF6CA-5D76-F985-E713-3F4DF7BC967F}|">
   <MonoDevelop.Ide.ItemProperties.Timeory PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Timeory/UIPolygon.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Timeory/MobileFunction.cs">
     <Files>
-      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="6" Column="25" />
-      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="28" Column="1" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARManager.cs" Line="12" Column="5" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARCloudBehaviour.cs" Line="93" Column="3" />
-      <File FileName="Assets/Scripts/Main/MgrDownload.cs" Line="66" Column="1" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="51" Column="47" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARImageTargetBehaviour.cs" Line="23" Column="9" />
-      <File FileName="Assets/Scripts/Timeory/UIPolygon.cs" Line="28" Column="40" />
+      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="125" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/Main/MgrDownload.cs" Line="20" Column="50" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="53" Column="93" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARCloudBehaviour.cs" Line="82" Column="53" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARManager.cs" Line="55" Column="9" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="261" Column="3" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARVideoTargetBehaviour.cs" Line="10" Column="5" NotebookId="1" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARImageTargetBehaviour.cs" Line="23" Column="9" NotebookId="1" />
+      <File FileName="Assets/Quibos/QuitApp/QuitApp.cs" Line="22" Column="17" NotebookId="1" />
     </Files>
+    <FloatingWindows>
+      <FloatingWindow WindowId="1" X="1423" Y="115" Width="654" Height="774">
+        <Files>
+          <File FileName="Assets/Scripts/Timeory/MobileFunction.cs" Line="1" Column="1" />
+        </Files>
+      </FloatingWindow>
+    </FloatingWindows>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

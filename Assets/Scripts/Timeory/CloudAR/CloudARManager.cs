@@ -9,8 +9,9 @@ public class CloudARManager : MonoBehaviour {
         CloudMode,
         LocalMove
     }
-
-    public List<Transform> targets;
+    public CloudARCloudBehaviour cloudReconginzer;
+    //public List<Transform> targets;
+    public List<VideoTargetController> videoTargetControllers;
 	// Use this for initialization
 	void Start () {
 		
@@ -28,8 +29,29 @@ public class CloudARManager : MonoBehaviour {
 
         //App.MgrPost.LoadLocalTarget("pwd", InitLocalVideoCardTarget, ErrorPassword);
     }
+    //所有target取消脱卡
+    public void SetToCardMode()
+    {
+        for (int i = 0; i < videoTargetControllers.Count; i++)
+        {
+            videoTargetControllers[i].SetToCardMode();
+        }
+    }
 
+    //打开/关闭 云识别
+    public void SetCloudRecognize(bool canRec)
+    {
+        if (canRec)
+        {
+            cloudReconginzer.enabled = true;
+        }
+        else
+            cloudReconginzer.enabled = false;
+    }
+    //清空所有target
+    public void ClearAllTarget()
+    {
+        SetToCardMode();
 
-
-
+    }
 }

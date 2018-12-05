@@ -26,20 +26,29 @@ public class MgrPost : MonoBehaviour {
     IEnumerator LoadLocalImageTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
     {
         Debug.Log(pwd);
-        WWWForm wwwForm = new WWWForm();
-        wwwForm.AddField("password", pwd);
-        WWW www = new WWW("http://106.14.60.213:8080/business/AR/local", wwwForm);
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+
+        headers.Add("Content-Type", "application/json");
+
+
+        JsonData data = new JsonData();
+        data["password"] = pwd;
+        byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
+
+        WWW www = new WWW("http://106.14.60.213:8080/business/AR/local", bs, headers);
         yield return www;
+        Debug.Log(www.text);
         string m_info = string.Empty;
 
         if (www.error != null)
         {
             m_info = www.error;
+            Debug.Log(m_info);
             yield return null;
         }
         if (www.isDone && www.error == null)
         {
-
+            Debug.Log(www.text);
             m_info = www.text.ToString();
             yield return m_info;
             Debug.Log(m_info);
@@ -55,7 +64,7 @@ public class MgrPost : MonoBehaviour {
             //Debug.Log (jd.ToString ());
             string s = jd["data"]["timesImgSrc"].ToString();
 
-            VideoTargetDate data = new VideoTargetDate(pwd,"", s);
+            VideoTargetDate _data = new VideoTargetDate(pwd,"", s);
 
             jd = jd["data"]["timeLineVideoList"];
             for (int i = 0; i < jd.Count; i++)
@@ -64,13 +73,14 @@ public class MgrPost : MonoBehaviour {
                                            jd[i]["createDate"].ToString(),
                                            jd[i]["user"]["nickName"].ToString(),
                                            jd[i]["timeVideoSrc"].ToString(),
-                                           jd[i]["user"]["userLogo"].ToString());
-                data.videoList.Add(cell);
+                                           jd[i]["user"]["userLogo"].ToString(),
+                                           jd[i]["userId"].ToString());
+                _data.videoList.Add(cell);
             }
 
-            Debug.Log(data.videoList.Count);
+            Debug.Log(_data.videoList.Count);
 
-            handle(data);
+            handle(_data);
         }
 
     }
@@ -114,6 +124,11 @@ public class MgrPost : MonoBehaviour {
 			Debug.Log(m_info);
 			JsonData jd = JsonMapper.ToObject(m_info);
 			jd = jd["data"]["timeLineVideoList"];
+            if (jd == null)
+            {
+                Destroy(GameObject.Find(target.Uid));
+                yield break;
+            } 
 			//Debug.Log (jd.ToString ());
 			byte[] bytes = Convert.FromBase64String(target.MetaData);
 			string s = System.Text.Encoding.GetEncoding("utf-8").GetString(bytes);
@@ -125,7 +140,8 @@ public class MgrPost : MonoBehaviour {
 					                       jd [i] ["createDate"].ToString (),
 					                       jd [i] ["user"]["nickName"].ToString (),
 					                       jd [i] ["timeVideoSrc"].ToString (),
-                                           jd [i] ["user"]["userLogo"].ToString());
+                                           jd [i] ["user"]["userLogo"].ToString(),
+                                           jd [i] ["userId"].ToString());
 				data.videoList.Add (cell);
 			}
 

@@ -19,7 +19,7 @@ public class QuitApp : MonoBehaviour {
             if (_BackType == BackType.Quit) {
                 Application.Quit();
             } else {
-                App.MgrLevel.Load("title",0, LoadType.LoadingCacheStreamFadeAsync);
+                GameObject.FindObjectOfType<CloudARManager>().SetToCardMode();
             }
         }
 	}

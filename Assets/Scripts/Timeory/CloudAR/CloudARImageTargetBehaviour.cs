@@ -19,7 +19,7 @@ public class CloudARImageTargetBehaviour : ImageTargetBaseBehaviour
 
 	void OnTargetFound(TargetAbstractBehaviour behaviour)
 	{
-        //处理隐藏其他target
+        MobileFunction.OnCloudIdentifySuccess(gameObject.name);
 
 		
 	}

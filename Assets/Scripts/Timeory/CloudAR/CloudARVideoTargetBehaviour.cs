@@ -6,6 +6,19 @@ using DG.Tweening;
 
 
 public class CloudARVideoTargetBehaviour : ImageTargetBaseBehaviour {
-    
+    protected override void Awake()
+    {
+        base.Awake();
+        TargetFound += OnTargetFound;
+    }
+
+
+
+    void OnTargetFound(TargetAbstractBehaviour behaviour)
+    {
+        MobileFunction.OnCloudIdentifySuccess(gameObject.name);
+
+
+    }
 
 }

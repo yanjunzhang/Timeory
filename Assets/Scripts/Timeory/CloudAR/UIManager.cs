@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour {
     {
         passwordBtn.gameObject.SetActive(false);
         passwordPanel.gameObject.SetActive(true);
+        //取消识别 删除所有target
+
     }
     //打开闪光灯
     public void OnFlashBtnClick()

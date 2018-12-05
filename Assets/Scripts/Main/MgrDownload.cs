@@ -4,15 +4,20 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 
-public class MgrDownload : MonoBehaviour {
-    public bool useMinimumPic=false;
+public class MgrDownload : MonoBehaviour
+{
+    public bool useMinimumPic = false;
 
     List<string> downloadList;
     string path;
-	void Awake()
-	{
-        //path = Application.persistentDataPath;
-        path = "sdcard/timeory/unity/video";
+    void Awake()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            path = "sdcard/timeory/unity/video";
+        }
+        else
+            path = Application.persistentDataPath;
     }
 	// Use this for initialization
 	void Start () {
@@ -27,6 +32,12 @@ public class MgrDownload : MonoBehaviour {
             DownloadLocalARImg("http://oss.timeory.com/Business/App/Scan/Img/ar1.jpg");
         }
     }
+    string GetNameFromUrl(string url)
+    {
+        string[] splits = url.Split('/');
+        string fileName = splits[splits.Length - 1];
+        return fileName;
+    }
 
     public void DownloadLocalARImg(string url)
     {
@@ -34,8 +45,7 @@ public class MgrDownload : MonoBehaviour {
     }
     IEnumerator IE_DownloadLocalARImg(string url)
     {
-        string[] splits = url.Split('/');
-        string fileName = splits[splits.Length - 1];
+        string fileName = GetNameFromUrl(url);
             //url.Remove(0, url.Length - 40);
         path = Application.streamingAssetsPath;
         if (File.Exists(path + "/" + fileName))
@@ -80,7 +90,8 @@ public class MgrDownload : MonoBehaviour {
     }
     IEnumerator IE_LoadImageWithUrl(Image image, string url)
     {
-        string fileName = url.Remove(0, url.Length - 40);
+        //string fileName = url.Remove(0, url.Length - 40);
+        string fileName = GetNameFromUrl(url);
         if (useMinimumPic)
             fileName += "!unity";
         
@@ -138,7 +149,8 @@ public class MgrDownload : MonoBehaviour {
 	//判断是否已经下载到本地,并返回路径 
 	public string GetVideoPath(string videoUrl)
 	{
-		string fileName = videoUrl.Remove (0, videoUrl.Length - 40);
+        //string fileName = videoUrl.Remove (0, videoUrl.Length - 40);
+        string fileName = GetNameFromUrl(videoUrl);
 		string videoPath = path+"/"+fileName;
 		if (File.Exists(videoPath)) {
 			if(Application.platform==RuntimePlatform.Android)
@@ -161,7 +173,8 @@ public class MgrDownload : MonoBehaviour {
 
 	IEnumerator SaveMp4(string url)
 	{
-		string fileName = url.Remove (0, url.Length - 40);
+		//string fileName = url.Remove (0, url.Length - 40);
+        string fileName = GetNameFromUrl(url);
         if (downloadList.Contains(fileName))
         {
             yield break;

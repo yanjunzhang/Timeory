@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using EasyAR;
 using UnityEngine.Video;
 
 public struct VideoTargetDate
 {
-    public VideoTargetDate(string targetId,string timeVideoScr,string timeImgSrc){
-		this.targetId = targetId;
+    public VideoTargetDate(string targetUid,string timeVideoScr,string timeImgSrc){
+        this.targetUid = targetUid;
         this.timeVideoSrc = timeVideoScr;
 		this.userName="";
 		this.createDate = "";
@@ -17,7 +18,7 @@ public struct VideoTargetDate
 		this.videoList = new List<VideoTargetCell> ();
 
 	}
-    public string targetId;
+    public string targetUid;
     public string userName;
 	public string createDate;
 	public string status;
@@ -29,13 +30,13 @@ public struct VideoTargetDate
 
 public struct VideoTargetCell
 {
-	public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo)
+    public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo,string userId)
 	{
 		this.createDate = createDate;
 		this.timeVideoSrc = timeVideoSrc;
         this.nickName = nickName;
         this.userlogo = userlogo;
-
+        this.userId = userId;
         this.timeLineId = "";
 	}
     public string createDate;
@@ -43,6 +44,7 @@ public struct VideoTargetCell
     public string timeVideoSrc;
     public string nickName;
     public string userlogo;
+    public string userId;
 }
 
 
@@ -78,12 +80,11 @@ public class VideoTargetController : MonoBehaviour {
 	public int selectedNumber;
 	public Transform backBtn, nextBtn,playBtn;
 
-    //public Transform ARCardTarget;
     //[HideInInspector]
     public EasyAR.VideoPlayerBehaviour vPlayer;
     //public GameObject playImage;
     //public RectTransform background;
-    public Image ui_userlogo;
+    public UnityEngine.UI.Image ui_userlogo;
     public Text ui_nickName;
     public Text ui_date;
 
@@ -92,8 +93,10 @@ public class VideoTargetController : MonoBehaviour {
 	bool isPlaneMode=true;
 	CloudARVideoTargetBehaviour videoTargetBehaviour;
 	VideoTargetDate m_data;
+    ImageTargetBaseBehaviour ARCardTarget;//target对象   处理脱卡
+    CloudARManager cloudArManager;
+    string targetName;
 
-    public string targetName;
 
 
 	/*void OnEnable()
@@ -140,6 +143,13 @@ public class VideoTargetController : MonoBehaviour {
     //初始化
     public void Init(VideoTargetDate data)
     {
+        targetName = data.targetUid;
+        ARCardTarget = transform.GetComponentInParent<ImageTargetBaseBehaviour>();
+        ARCardTarget.TargetFound+= OnTargetFound;
+        ARCardTarget.TargetLost += OnTargetLost;
+
+        cloudArManager = GameObject.FindObjectOfType<CloudARManager>();
+        cloudArManager.videoTargetControllers.Add(this);
 		m_data = data;
 		this.selectedNumber = 0;
 		videoTargetBehaviour = GetComponentInParent<CloudARVideoTargetBehaviour> ();
@@ -247,11 +257,19 @@ public class VideoTargetController : MonoBehaviour {
         Handheld.PlayFullScreenMovie(moviePath, new Color(0, 0, 0, 0), FullScreenMovieControlMode.Full);
     }
     //添加好友
-    void OnAddFriendBtnClick()
+    public void OnAddFriendBtnClick()
     {
-		
+        string userId = m_data.videoList[selectedNumber].userId;
+        MobileFunction.SendFriendRequest(userId);
+        GameObject.FindObjectOfType<UIManager>().DebugToUI("Add Friend: "+userId);
     }
-
+    //添加视频
+    public void OnAddVideBtnClick()
+    {
+        string targetId = m_data.targetUid;
+        MobileFunction.AddVideoIntoCloudSpace(targetId);
+        GameObject.FindObjectOfType<UIManager>().DebugToUI("Add Video: " + targetId);
+    }
     /*
     public void SetBackgroundSize(float width, float height)
     {
@@ -308,5 +326,34 @@ public class VideoTargetController : MonoBehaviour {
         //vPlayer.transform.DOLocalRotate(new Vector3(-71f, 0, 0), 1f);
 
     }
+    //脱卡模式
+    public void SetToLoseCardMode()
+    { 
+        //脱卡(设置父物体)
+        GameObject.Find("ARCamera").transform.position = Vector3.zero;
+        GameObject.Find("ARCamera").transform.rotation = Quaternion.identity;
+        transform.SetParent(cloudArManager.transform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+    //恢复AR模式 
+    public void SetToCardMode()
+    {
+        transform.SetParent(ARCardTarget.transform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
 
+    void OnTargetFound(TargetAbstractBehaviour behaviour)
+    {
+        //取消脱卡
+        cloudArManager.SetToCardMode();
+
+    }
+
+
+    void OnTargetLost(TargetAbstractBehaviour behaviour)
+    {
+        SetToLoseCardMode();
+    }
 }
