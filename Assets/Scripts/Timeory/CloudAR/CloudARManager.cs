@@ -14,7 +14,6 @@ public class CloudARManager : MonoBehaviour {
     public List<VideoTargetController> videoTargetControllers;
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame

@@ -12,11 +12,11 @@ public class MgrDownload : MonoBehaviour
     string path;
     void Awake()
     {
-        if (Application.platform == RuntimePlatform.Android)
+        /*if (Application.platform == RuntimePlatform.Android)
         {
             path = "sdcard/timeory/unity/video";
         }
-        else
+        else*/
             path = Application.persistentDataPath;
     }
 	// Use this for initialization
@@ -39,15 +39,18 @@ public class MgrDownload : MonoBehaviour
         return fileName;
     }
 
-    public void DownloadLocalARImg(string url)
+    public string DownloadLocalARImg(string url)
     {
         StartCoroutine((IE_DownloadLocalARImg(url)));
+        string fileName = GetNameFromUrl(url);
+        path = Application.persistentDataPath;
+        return (path + "/" + fileName);
+
     }
     IEnumerator IE_DownloadLocalARImg(string url)
     {
         string fileName = GetNameFromUrl(url);
-            //url.Remove(0, url.Length - 40);
-        path = Application.streamingAssetsPath;
+        path = Application.persistentDataPath;
         if (File.Exists(path + "/" + fileName))
         {
             yield break;
@@ -90,6 +93,7 @@ public class MgrDownload : MonoBehaviour
     }
     IEnumerator IE_LoadImageWithUrl(Image image, string url)
     {
+        Debug.Log(url);
         //string fileName = url.Remove(0, url.Length - 40);
         string fileName = GetNameFromUrl(url);
         if (useMinimumPic)
@@ -97,8 +101,8 @@ public class MgrDownload : MonoBehaviour
         
         if (File.Exists(path + "/" + fileName))
         {
-            WWW www = new WWW(path + "/" + fileName);
-            Debug.Log("file://" + path + "/" + fileName);
+            WWW www = new WWW("file://" +path + "/" + fileName);
+            Debug.Log( path + "/" + fileName);
             yield return www;
 
             if (www.error != null)
@@ -155,8 +159,6 @@ public class MgrDownload : MonoBehaviour
 		if (File.Exists(videoPath)) {
 			if(Application.platform==RuntimePlatform.Android)
 			{
-                GameObject.FindObjectOfType<UIManager>().DebugToUI("file Exists"+videoPath);
-                Debug.Log(videoPath);
                 return videoPath;
 			}else if(Application.platform==RuntimePlatform.IPhonePlayer)
 			{
@@ -166,13 +168,15 @@ public class MgrDownload : MonoBehaviour
             }
 		}else
 		{
-            StartCoroutine(SaveMp4(videoPath));
+            StartCoroutine(SaveMp4(videoUrl));
 			return videoUrl;
 		}
 	}
 
 	IEnumerator SaveMp4(string url)
 	{
+        Debug.Log(url);
+        Debug.Log("save mp4");
 		//string fileName = url.Remove (0, url.Length - 40);
         string fileName = GetNameFromUrl(url);
         if (downloadList.Contains(fileName))
@@ -181,16 +185,17 @@ public class MgrDownload : MonoBehaviour
         }
         
 		if (File.Exists(path + "/"+fileName)) {
-            GameObject.FindObjectOfType<UIManager>().DebugToUI("file Exists");
 			yield break;
 		}
         downloadList.Add(fileName);
-        //        string str = path.Replace(@"/", @"\");
+        //string str = path.Replace(@"/", @"\");
         WWW www2 = new WWW(url);  
 		//定义www为WWW类型并且等于所下载下来的WWW中内容。  
-		yield return www2;  
-		//Debug.Log (www2.isDone);
-		//Debug.Log (www2.bytes.Length);
+        while (!www2.isDone)
+        {
+            yield return www2;  
+        }
+
 
 		//返回所下载的www的值   
 		if (www2.error != null) {
@@ -199,9 +204,9 @@ public class MgrDownload : MonoBehaviour
 
 		try  
 		{  
-			File.WriteAllBytes(path + "/"+fileName,www2.bytes);  
-            GameObject.FindObjectOfType<UIManager>().DebugToUI("file downloaded"+path + "/" + fileName);
-			Debug.Log(path + "/"+fileName);
+            FileStream fs = new FileStream(path + "/" + fileName,FileMode.Create,FileAccess.Write);
+            fs.Write(www2.bytes, 0,www2.bytes.Length);
+            fs.Close();
             downloadList.Remove(fileName);
         }  
 		catch(IOException e)  

@@ -25,8 +25,7 @@ public class UIManager : MonoBehaviour {
     }
     public void DebugToUI(string str)
     {
-        debugPanel.text += str;
-        debugPanel.text += " | ";
+        debugPanel.text = str;
     }
     //打开密码
     public void OnPasswordBtnClick()
@@ -50,7 +49,11 @@ public class UIManager : MonoBehaviour {
     //输入密码后的操作
     public void OnPasswordReturn()
     {
-        App.MgrPost.LoadLocalTarget(inputField.text,InitLocalVideoCardTarget,ErrorPassword);
+        OnPasswordReturn(inputField.text);
+    }
+    public void OnPasswordReturn(string pwd)
+    {
+        App.MgrPost.LoadLocalTarget(pwd, InitLocalVideoCardTarget, ErrorPassword);
         passwordPanel.gameObject.SetActive(false);
         passwordBtn.gameObject.SetActive(true);
         inputField.text = "";
@@ -96,14 +99,13 @@ public class UIManager : MonoBehaviour {
         //var gameObj = new GameObject(imageTarget.Name);
         //gameObj.transform.SetParent(manager.transform);
         ImageTrackerBehaviour tracker = FindObjectOfType<ImageTrackerBehaviour>();
-        GameObject _gameObj = new GameObject("ar1");
+        GameObject _gameObj = new GameObject(data.targetUid);
         _gameObj.transform.localPosition = Vector3.zero;
         var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
         targetBehaviour.Bind(tracker);
-        targetBehaviour.SetupWithImage("ar1.jpg", StorageType.Assets, "ar1", new Vector2());
+        targetBehaviour.SetupWithImage(data.timeImgSrc, StorageType.Absolute, data.targetUid, new Vector2());
         App.MgrPrefab.Create(_gameObj, "VideoTarget", Vector3.zero, (gameObj) => {
-
-            //gameObj.GetComponentInChildren<VideoTargetController>().Init(data);
+            gameObj.GetComponentInChildren<VideoTargetController>().Init(data);
         });
 
 

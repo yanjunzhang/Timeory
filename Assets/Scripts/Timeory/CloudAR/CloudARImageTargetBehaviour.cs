@@ -15,15 +15,18 @@ public class CloudARImageTargetBehaviour : ImageTargetBaseBehaviour
 		TargetLost += OnTargetLost;
 	}
 
-
+    
 
 	void OnTargetFound(TargetAbstractBehaviour behaviour)
 	{
         MobileFunction.OnCloudIdentifySuccess(gameObject.name);
 
-		
 	}
 
+    void OnTargetLoad(TargetAbstractBehaviour behaviour)
+    {
+        Debug.Log("target Load");
+    }
 
 	void OnTargetLost(TargetAbstractBehaviour behaviour)
 	{

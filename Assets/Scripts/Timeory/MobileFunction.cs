@@ -54,7 +54,7 @@ public class MobileFunction : MonoBehaviour
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("addVideoIntoLocalSpace()", targetId);
+			jo.Call("addVideoIntoLocalSpace", targetId);
 		}
 		else
 			Debug.Log("添加本地识别视频" + targetId);
@@ -70,7 +70,7 @@ public class MobileFunction : MonoBehaviour
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("addVideoIntoCloudSpace()", targetId);
+            jo.Call("addVideoIntoCloudSpace", targetId);
 		}
 		else
 			Debug.Log("添加云识别视频" + targetId);
@@ -86,7 +86,7 @@ public class MobileFunction : MonoBehaviour
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("popUpPasswordDialog()", targetId);
+			jo.Call("popUpPasswordDialog", targetId);
 		}
 		else
 			Debug.Log("本地识别输入密码弹窗" + targetId);
@@ -102,7 +102,7 @@ public class MobileFunction : MonoBehaviour
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("refreshIdentification()", targetId);
+			jo.Call("refreshIdentification", targetId);
 		}
 		else
 			Debug.Log("重新识别" + targetId);
@@ -118,7 +118,7 @@ public class MobileFunction : MonoBehaviour
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("refreshIdentification()", userId);
+            jo.Call("sendFriendRequest", userId);
 		}
 		else
 			Debug.Log("好友添加请求" + userId);

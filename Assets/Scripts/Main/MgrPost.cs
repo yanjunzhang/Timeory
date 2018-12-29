@@ -63,7 +63,7 @@ public class MgrPost : MonoBehaviour {
 
             //Debug.Log (jd.ToString ());
             string s = jd["data"]["timesImgSrc"].ToString();
-
+            s = App.MgrDownload.DownloadLocalARImg(s);
             VideoTargetDate _data = new VideoTargetDate(pwd,"", s);
 
             jd = jd["data"]["timeLineVideoList"];
