@@ -74,7 +74,8 @@ public class MgrPost : MonoBehaviour {
                                            jd[i]["user"]["nickName"].ToString(),
                                            jd[i]["timeVideoSrc"].ToString(),
                                            jd[i]["user"]["userLogo"].ToString(),
-                                           jd[i]["userId"].ToString());
+                                           jd[i]["id"].ToString(),
+                                           jd[i]["user"]["isFriend"].ValueAsBoolean());
                 _data.videoList.Add(cell);
             }
 
@@ -141,7 +142,8 @@ public class MgrPost : MonoBehaviour {
 					                       jd [i] ["user"]["nickName"].ToString (),
 					                       jd [i] ["timeVideoSrc"].ToString (),
                                            jd [i] ["user"]["userLogo"].ToString(),
-                                           jd [i] ["userId"].ToString());
+                                           jd [i] ["id"].ToString(),
+                                           jd [i] ["user"]["isFriend"].ValueAsBoolean());
 				data.videoList.Add (cell);
 			}
 

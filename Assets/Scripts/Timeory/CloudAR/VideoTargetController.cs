@@ -30,7 +30,7 @@ public struct VideoTargetDate
 
 public struct VideoTargetCell
 {
-    public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo,string userId)
+    public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo,string userId,bool isFriend)
     {
         this.createDate = createDate;
         this.timeVideoSrc = timeVideoSrc;
@@ -38,6 +38,7 @@ public struct VideoTargetCell
         this.userlogo = userlogo;
         this.userId = userId;
         this.timeLineId = "";
+        this.isFriend = isFriend;
     }
     public string createDate;
     public string timeLineId;
@@ -45,6 +46,7 @@ public struct VideoTargetCell
     public string nickName;
     public string userlogo;
     public string userId;
+    public bool isFriend;
 }
 
 
@@ -240,6 +242,12 @@ public class VideoTargetController : MonoBehaviour {
         }else if (selectedNumber==m_data.videoList.Count-1) {
             SetArrowBtn(true,false);
         }
+
+        if (m_data.videoList[selectedNumber].isFriend)
+        {
+            btns[2].gameObject.SetActive(false);
+        }else
+            btns[2].gameObject.SetActive(true);
         //更新用户信息
         Debug.Log("当前选择： "+selectedNumber);
         VideoTargetCell currCell = m_data.videoList[selectedNumber];

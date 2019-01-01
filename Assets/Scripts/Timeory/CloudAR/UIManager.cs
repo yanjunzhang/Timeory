@@ -30,8 +30,9 @@ public class UIManager : MonoBehaviour {
     //打开密码
     public void OnPasswordBtnClick()
     {
-        passwordBtn.gameObject.SetActive(false);
-        passwordPanel.gameObject.SetActive(true);
+        MobileFunction.PopUpPasswordDialog("btn Click");
+        //passwordBtn.gameObject.SetActive(false);
+        //passwordPanel.gameObject.SetActive(true);
         //取消识别 删除所有target
 
     }
