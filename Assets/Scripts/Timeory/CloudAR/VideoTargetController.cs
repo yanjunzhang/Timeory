@@ -8,13 +8,14 @@ using UnityEngine.Video;
 
 public struct VideoTargetDate
 {
-    public VideoTargetDate(string targetUid,string timeVideoScr,string timeImgSrc){
+    public VideoTargetDate(string targetUid,string timeVideoScr,string id,string timeImgSrc){
         this.targetUid = targetUid;
         this.timeVideoSrc = timeVideoScr;
         this.userName="";
         this.createDate = "";
         this.status = "";
         this.timeImgSrc=timeImgSrc;
+        this.id = id;
         this.videoList = new List<VideoTargetCell> ();
 
     }
@@ -24,6 +25,7 @@ public struct VideoTargetDate
     public string status;
     public string timeImgSrc;
     public string timeVideoSrc;
+    public string id;
     public List<VideoTargetCell> videoList;
 
 }
@@ -132,7 +134,8 @@ public class VideoTargetController : MonoBehaviour {
     {
         //path = GetComponent<VideoDownloader>().GetVideoPath(path);
         path = App.MgrDownload.GetVideoPath(path);
-        //vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();
+        //vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();、
+        vPlayer.Stop();
         vPlayer.Path = path;
         GameObject.FindObjectOfType<UIManager>().DebugToUI("video Path : "+path);
         vPlayer.Open();
@@ -311,11 +314,12 @@ public class VideoTargetController : MonoBehaviour {
     public void OnAddVideBtnClick()
     {
         App.MgrAudio.MultPlay("Open3");
-        string targetId = m_data.targetUid;
-        GameObject.FindObjectOfType<UIManager>().DebugToUI("Add Video: " + targetId);
+        //string targetId = m_data.targetUid;
+        string userId = m_data.id;
+        GameObject.FindObjectOfType<UIManager>().DebugToUI("Add Video: " + userId);
         try
         {
-            MobileFunction.AddVideoIntoCloudSpace(targetId);
+            MobileFunction.AddVideoIntoCloudSpace(userId);
         }
         catch (System.Exception ex)
         {
@@ -402,6 +406,14 @@ public class VideoTargetController : MonoBehaviour {
     {
         //取消脱卡
         cloudArManager.SetToCardMode();
+        try
+        {
+            MobileFunction.OnCloudIdentifySuccess(m_data.videoList[selectedNumber].userId);
+        }
+        catch (System.Exception ex)
+        {
+            //GameObject.FindObjectOfType<UIManager>().DebugToUI(ex.ToString());
+        }
     }
 
 

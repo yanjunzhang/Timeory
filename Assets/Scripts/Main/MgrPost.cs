@@ -63,8 +63,9 @@ public class MgrPost : MonoBehaviour {
 
             //Debug.Log (jd.ToString ());
             string s = jd["data"]["timesImgSrc"].ToString();
+            string id = jd["data"]["id"].ToString();
             s = App.MgrDownload.DownloadLocalARImg(s);
-            VideoTargetDate _data = new VideoTargetDate(pwd,"", s);
+            VideoTargetDate _data = new VideoTargetDate(pwd,"",id, s);
 
             jd = jd["data"]["timeLineVideoList"];
             for (int i = 0; i < jd.Count; i++)
@@ -74,13 +75,13 @@ public class MgrPost : MonoBehaviour {
                                            jd[i]["user"]["nickName"].ToString(),
                                            jd[i]["timeVideoSrc"].ToString(),
                                            jd[i]["user"]["userLogo"].ToString(),
-                                           jd[i]["id"].ToString(),
+                                           jd[i]["user"]["id"].ToString(),
                                            jd[i]["user"]["isFriend"].ValueAsBoolean());
                 _data.videoList.Add(cell);
             }
 
             Debug.Log(_data.videoList.Count);
-
+            yield return new WaitForSeconds(1f);
             handle(_data);
         }
 
@@ -124,6 +125,7 @@ public class MgrPost : MonoBehaviour {
             yield return m_info;
 			Debug.Log(m_info);
 			JsonData jd = JsonMapper.ToObject(m_info);
+            string id = jd["data"]["id"].ToString();
 			jd = jd["data"]["timeLineVideoList"];
             if (jd == null)
             {
@@ -133,7 +135,8 @@ public class MgrPost : MonoBehaviour {
 			//Debug.Log (jd.ToString ());
 			byte[] bytes = Convert.FromBase64String(target.MetaData);
 			string s = System.Text.Encoding.GetEncoding("utf-8").GetString(bytes);
-			VideoTargetDate data = new VideoTargetDate (target.Uid,s,"");
+
+            VideoTargetDate data = new VideoTargetDate (target.Uid,s,id,"");
 
 
 			for (int i = 0; i < jd.Count; i++) {
@@ -142,7 +145,7 @@ public class MgrPost : MonoBehaviour {
 					                       jd [i] ["user"]["nickName"].ToString (),
 					                       jd [i] ["timeVideoSrc"].ToString (),
                                            jd [i] ["user"]["userLogo"].ToString(),
-                                           jd [i] ["id"].ToString(),
+                                           jd [i] ["user"]["id"].ToString(),
                                            jd [i] ["user"]["isFriend"].ValueAsBoolean());
 				data.videoList.Add (cell);
 			}

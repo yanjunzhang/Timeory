@@ -18,6 +18,7 @@ public class AndroidMethod : MonoBehaviour {
     public void LoadLocalTarget(string pwd)
     {
         m_ui.OnPasswordReturn(pwd);
+        GameObject.FindObjectOfType<UIManager>().DebugToUI(pwd);
     }
 
     public void LoadScene(string sceneName)

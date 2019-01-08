@@ -16,7 +16,8 @@ public class CloudARVideoTargetBehaviour : ImageTargetBaseBehaviour {
 
     void OnTargetFound(TargetAbstractBehaviour behaviour)
     {
-        try
+        /*
+try
         {
             MobileFunction.OnCloudIdentifySuccess(gameObject.name);
         }
@@ -24,6 +25,8 @@ public class CloudARVideoTargetBehaviour : ImageTargetBaseBehaviour {
         {
            //GameObject.FindObjectOfType<UIManager>().DebugToUI(ex.ToString());
         }
+
+        */
 
     }
 

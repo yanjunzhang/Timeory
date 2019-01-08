@@ -1,21 +1,22 @@
 ﻿<Properties StartupConfiguration="{174AF6CA-5D76-F985-E713-3F4DF7BC967F}|">
   <MonoDevelop.Ide.ItemProperties.Timeory PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Quibos/QuitApp/HideAndroidButtons.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="67" Column="32" />
+      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="68" Column="49" />
       <File FileName="Assets/Scripts/Main/MgrDownload.cs" Line="42" Column="37" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="99" Column="58" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARCloudBehaviour.cs" Line="78" Column="16" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="33" Column="35" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARCloudBehaviour.cs" Line="89" Column="63" />
       <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARManager.cs" Line="33" Column="6" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="9" Column="15" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARVideoTargetBehaviour.cs" Line="25" Column="14" />
-      <File FileName="Assets/Scripts/Timeory/MobileFunction.cs" Line="36" Column="3" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="18" Column="15" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARVideoTargetBehaviour.cs" Line="27" Column="10" />
+      <File FileName="Assets/Scripts/Timeory/MobileFunction.cs" Line="67" Column="34" />
       <File FileName="Assets/Scripts/Timeory/AndroidMethod.cs" Line="15" Column="1" />
       <File FileName="Assets/Scripts/Main/MgrLevel.cs" Line="51" Column="33" />
       <File FileName="Assets/Scripts/Timeory/UIPolygon.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Timeory/Test.cs" Line="23" Column="37" />
       <File FileName="Assets/Quibos/QuitApp/QuitApp.cs" Line="1" Column="1" />
       <File FileName="Assets/Quibos/QuitApp/HideAndroidButtons.cs" Line="1" Column="1" />
+      <File FileName="Assets/EasyAR/Scripts/VideoPlayerBehaviour.cs" Line="11" Column="57" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
