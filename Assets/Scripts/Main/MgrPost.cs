@@ -16,7 +16,6 @@ public class MgrPost : MonoBehaviour {
 	{
 		StartCoroutine (LoadImageTarget (target,handle));
 	}
-
     public void LoadLocalTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
     {
         StartCoroutine(LoadLocalImageTarget(pwd,handle,errorHandle));
@@ -57,6 +56,7 @@ public class MgrPost : MonoBehaviour {
             if (!jd["msg"].ToString().Equals("识别成功"))
             {
                 Debug.Log("密码错误");
+                MobileFunction.DebugByAndroid("密码错误");
                 errorHandle();
                 yield break;
             }
@@ -76,16 +76,21 @@ public class MgrPost : MonoBehaviour {
                                            jd[i]["timeVideoSrc"].ToString(),
                                            jd[i]["user"]["userLogo"].ToString(),
                                            jd[i]["user"]["id"].ToString(),
-                                           jd[i]["user"]["isFriend"].ValueAsBoolean());
+                                           jd[i]["user"]["isFriend"].ValueAsBoolean(),
+                                           jd[i]["isVertical"].ToString()
+                );
                 _data.videoList.Add(cell);
             }
 
             Debug.Log(_data.videoList.Count);
+            MobileFunction.DebugByAndroid("视频数量: "+_data.videoList.Count);
             yield return new WaitForSeconds(1f);
             handle(_data);
         }
 
     }
+
+
 
 	//获取该target下的所有用户及视频信息
 	//POST /videos/cloud/targetId/{targetId}/memberCode/{memberCode} 2018-01-22-用户查看云识别时光轴
@@ -146,11 +151,10 @@ public class MgrPost : MonoBehaviour {
 					                       jd [i] ["timeVideoSrc"].ToString (),
                                            jd [i] ["user"]["userLogo"].ToString(),
                                            jd [i] ["user"]["id"].ToString(),
-                                           jd [i] ["user"]["isFriend"].ValueAsBoolean());
+                                           jd [i] ["user"]["isFriend"].ValueAsBoolean(),
+                                           jd[i]["isVertical"].ToString());
 				data.videoList.Add (cell);
 			}
-
-			Debug.Log (data.videoList.Count);
 
 			handle (target, data);
 		}

@@ -16,32 +16,32 @@ public class MobileFunction : MonoBehaviour
 	/// 本地识别成功
 	/// </summary>
 	/// <param name="uid">originalId.</param>
-	public static void OnLocalIdentifySuccess(string originalId)
+    public static void OnLocalIdentifySuccess(string originalId, string isVertical)
 	{
 		if (Application.platform == RuntimePlatform.Android)
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("onLocalIdentifySuccess", originalId);
+            jo.Call("onLocalIdentifySuccess", originalId,isVertical);
 		}
 		else
-			Debug.Log("本地识别成功" + originalId);
+            Debug.Log("本地识别成功" + originalId+"is vertical"+isVertical);
 	}
 
 	/// <summary>
 	/// 云识别成功
 	/// </summary>
 	/// <param name="uid">originalId.</param>
-	public static void OnCloudIdentifySuccess(string targetId)
+    public static void OnCloudIdentifySuccess(string targetId, string isVertical)
 	{
 		if (Application.platform == RuntimePlatform.Android)
 		{
 			AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-			jo.Call("onCloudIdentifySuccess", targetId);
+            jo.Call("onCloudIdentifySuccess", targetId,isVertical);
 		}
 		else
-			Debug.Log("云识别成功" + targetId);
+            Debug.Log("云识别成功" + targetId+"is vertical"+isVertical);
 	}
 
 	/// <summary>

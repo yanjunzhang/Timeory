@@ -32,8 +32,9 @@ public struct VideoTargetDate
 
 public struct VideoTargetCell
 {
-    public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo,string userId,bool isFriend)
+    public VideoTargetCell(string createDate,string nickName,string timeVideoSrc,string userlogo,string userId,bool isFriend,string isVertical)
     {
+        this.isVertical = isVertical;
         this.createDate = createDate;
         this.timeVideoSrc = timeVideoSrc;
         this.nickName = nickName;
@@ -42,6 +43,7 @@ public struct VideoTargetCell
         this.timeLineId = "";
         this.isFriend = isFriend;
     }
+    public string isVertical;
     public string createDate;
     public string timeLineId;
     public string timeVideoSrc;
@@ -82,6 +84,7 @@ public class VideoTargetController : MonoBehaviour {
         }
     }
     public int selectedNumber;
+    public Transform BGWide, BGTall;
     public Transform backBtn, nextBtn,playBtn;
     public Transform bg;
     public Transform[] btns;
@@ -98,12 +101,13 @@ public class VideoTargetController : MonoBehaviour {
     bool isPlaying = true;
     bool isPlaneMode=true;
     CloudARVideoTargetBehaviour videoTargetBehaviour;
-    VideoTargetDate m_data;
+    public VideoTargetDate m_data;
     ImageTargetBaseBehaviour ARCardTarget;//target对象   处理脱卡
     CloudARManager cloudArManager;
+    public ImageTarget imageTarget;
     string targetName;
     bool isFirst = true;
-
+    bool isCloud;
 
     /*void OnEnable()
     {
@@ -149,9 +153,10 @@ public class VideoTargetController : MonoBehaviour {
     }
 
     //初始化
-    public void Init(VideoTargetDate data)
+    public void Init(VideoTargetDate data,bool isCloud = true)
     {
         cam = GameObject.Find("ARCamera").transform;
+        this.isCloud = isCloud;
         targetName = data.targetUid;
         ARCardTarget = transform.GetComponentInParent<ImageTargetBaseBehaviour>();
         ARCardTarget.TargetFound+= OnTargetFound;
@@ -176,7 +181,8 @@ public class VideoTargetController : MonoBehaviour {
         //播放结束后暂停
         vPlayer.VideoReachEndEvent += (sender, e) => {
             //GameObject.FindObjectOfType<UIManager>().DebugToUI("reachEnd");
-            PauseVideo();
+            //停止播放
+            //PauseVideo();
         };
         RefreshUI();
     }
@@ -233,6 +239,13 @@ public class VideoTargetController : MonoBehaviour {
     //更新UI
     void RefreshUI()
     {
+        //更新界面
+        if (m_data.videoList[selectedNumber].isVertical == "0")
+        {
+            TurnToWideMode();
+        }
+        else
+            TurnToTallMode();
         //更新按钮
         if (selectedNumber==0) {
             if (m_data.videoList.Count>1) {
@@ -408,7 +421,11 @@ public class VideoTargetController : MonoBehaviour {
         cloudArManager.SetToCardMode();
         try
         {
-            MobileFunction.OnCloudIdentifySuccess(m_data.videoList[selectedNumber].userId);
+            if (isCloud)
+            {
+                MobileFunction.OnCloudIdentifySuccess(m_data.videoList[selectedNumber].userId,m_data.videoList[selectedNumber].isVertical);
+            }else
+                MobileFunction.OnLocalIdentifySuccess(m_data.videoList[selectedNumber].userId,m_data.videoList[selectedNumber].isVertical);
         }
         catch (System.Exception ex)
         {
@@ -420,5 +437,36 @@ public class VideoTargetController : MonoBehaviour {
     void OnTargetLost(TargetAbstractBehaviour behaviour)
     {
         SetToLoseCardMode();
+    }
+
+    void TurnToTallMode()
+    {
+        btns[0].DOLocalMove(new Vector3(24f,534f,0),1f);//返回
+        btns[1].DOLocalMove(new Vector3(111f,536f,0),1f);//下一个
+        btns[2].DOLocalMove(new Vector3(190f, 506f, 0), 1f);//添加好友
+        btns[3].DOLocalMove(new Vector3(279f, 507f, 0), 1f);//3添加视频
+        btns[4].DOLocalMove(new Vector3(368f, 509f, 0), 1f);//4切换模式
+        btns[5].DOLocalMove(new Vector3(321f, -131f, 0), 1f);//5日期
+        //头像 昵称
+        ui_userlogo.transform.DOLocalMove(new Vector3(32f, 445f, 0), 1f);
+        ui_nickName.transform.DOLocalMove(new Vector3(157f,440f,0),1f);
+
+        BGWide.gameObject.SetActive(false);
+        BGTall.gameObject.SetActive(true);
+    }
+    void TurnToWideMode()
+    {
+        btns[0].DOLocalMove(new Vector3(-51f, 437f, 0), 1f);
+        btns[1].DOLocalMove(new Vector3(57f, 437f, 0), 1f);
+        btns[2].DOLocalMove(new Vector3(190, 391.9f, 0), 1f);//添加好友
+        btns[3].DOLocalMove(new Vector3(279f, 393f, 0), 1f);//3添加视频
+        btns[4].DOLocalMove(new Vector3(368f, 393f, 0), 1f);//4切换模式
+        btns[5].DOLocalMove(new Vector3(321f, -49f, 0), 1f);//5日期
+        //头像 昵称
+        ui_userlogo.transform.DOLocalMove(new Vector3(-49.2f, 356.6f, 0), 1f);
+        ui_nickName.transform.DOLocalMove(new Vector3(69.9f, 353.2f, 0), 1f);
+
+        BGWide.gameObject.SetActive(true);
+        BGTall.gameObject.SetActive(false);
     }
 }

@@ -45,7 +45,8 @@ public class UIManager : MonoBehaviour {
     //退出
     public void OnQuitBtnClick()
     {
-        Application.Quit();
+        //Application.Quit();
+        MobileFunction.QuitUnity();
     }
     //输入密码后的操作
     public void OnPasswordReturn()
@@ -103,11 +104,28 @@ public class UIManager : MonoBehaviour {
         GameObject _gameObj = new GameObject(data.targetUid);
         _gameObj.transform.localPosition = Vector3.zero;
         var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
+        //targetBehaviour.TargetFound += OnTargetFound;
         targetBehaviour.Bind(tracker);
-        targetBehaviour.SetupWithImage(data.timeImgSrc, StorageType.Absolute, data.targetUid, new Vector2());
+        targetBehaviour.SetupWithImage(data.timeImgSrc, StorageType.Absolute, data.targetUid, Vector2.one*10f);
         App.MgrPrefab.Create(_gameObj, "VideoTarget", Vector3.zero, (gameObj) => {
-            gameObj.GetComponentInChildren<VideoTargetController>().Init(data);
+            gameObj.GetComponentInChildren<VideoTargetController>().Init(data,false);
         });
+
+
+    }
+    void OnTargetFound(TargetAbstractBehaviour behaviour)
+    {
+        
+try
+        {
+            VideoTargetController target = behaviour.gameObject.GetComponentInChildren<VideoTargetController>();
+            MobileFunction.OnLocalIdentifySuccess(target.m_data.videoList[target.selectedNumber].userId,target.m_data.videoList[target.selectedNumber].isVertical);
+        }
+        catch (System.Exception ex)
+        {
+           //GameObject.FindObjectOfType<UIManager>().DebugToUI(ex.ToString());
+        }
+
 
 
     }

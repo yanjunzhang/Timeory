@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AndroidMethod : MonoBehaviour {
     public UIManager m_ui;
+    public CloudARManager arManager;
 	// Use this for initialization
 	void Start () {
 		
@@ -12,7 +13,6 @@ public class AndroidMethod : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
     }
 
     public void LoadLocalTarget(string pwd)
@@ -26,4 +26,16 @@ public class AndroidMethod : MonoBehaviour {
         App.MgrLevel.Load(sceneName);
 
     }
+
+    //本地对象 的uid 就是pwd
+    public void ReloadLocalVideoTargetData(string id)
+    {
+        arManager.ReloadLocalVideoTargetData(id);
+    }
+
+    public void ReloadVideoTargetData(string id)
+    {
+        arManager.ReloadVideoTargetData(id);
+    }
+
 }

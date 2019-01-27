@@ -77,6 +77,7 @@ public class MgrDownload : MonoBehaviour
             {
                 File.WriteAllBytes(path + "/" + fileName, pngData);
                 Debug.Log(path + "/" + fileName);
+                MobileFunction.DebugByAndroid(path+"/"+fileName);
             }
             catch (IOException e)
             {
@@ -103,6 +104,7 @@ public class MgrDownload : MonoBehaviour
         {
             WWW www = new WWW("file://" +path + "/" + fileName);
             Debug.Log( path + "/" + fileName);
+            MobileFunction.DebugByAndroid(path+"/"+fileName);
             yield return www;
 
             if (www.error != null)
@@ -139,6 +141,7 @@ public class MgrDownload : MonoBehaviour
             {
                 File.WriteAllBytes(path + "/" + fileName, pngData);
                 Debug.Log(path + "/" + fileName);
+                MobileFunction.DebugByAndroid(path+"/"+fileName);
             }
             catch (IOException e)
             {
@@ -176,7 +179,7 @@ public class MgrDownload : MonoBehaviour
 	IEnumerator SaveMp4(string url)
 	{
         Debug.Log(url);
-        Debug.Log("save mp4");
+        MobileFunction.DebugByAndroid(url);
 		//string fileName = url.Remove (0, url.Length - 40);
         string fileName = GetNameFromUrl(url);
         if (downloadList.Contains(fileName))

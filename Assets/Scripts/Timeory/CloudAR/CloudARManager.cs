@@ -18,7 +18,7 @@ public class CloudARManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+
     }
 
     //手动加载videoTarget
@@ -52,5 +52,57 @@ public class CloudARManager : MonoBehaviour {
     {
         SetToCardMode();
 
+    }
+
+    public void ReloadVideoTargetData(string id)
+    {
+        for (int i = 0; i < videoTargetControllers.Count; i++)
+        {
+            if (videoTargetControllers[i].m_data.id == id)
+            {
+                App.MgrPost.Load(videoTargetControllers[i].imageTarget,ReloadDataHandle);
+            }
+        }
+    }
+
+
+
+    void ReloadDataHandle(ImageTarget imageTarget,VideoTargetDate data)
+    {
+        for (int i = 0; i < videoTargetControllers.Count; i++)
+        {
+            if (videoTargetControllers[i].m_data.id == data.id)
+            {
+                videoTargetControllers[i].UpdateData(data);
+            }
+        }
+
+    }
+
+    //本地对象 的uid 就是pwd
+    public void ReloadLocalVideoTargetData(string id)
+    {
+        MobileFunction.DebugByAndroid("重新加载本地对象: "+id);
+        for (int i = 0; i < videoTargetControllers.Count; i++)
+        {
+            if (videoTargetControllers[i].m_data.id == id)
+            {
+                App.MgrPost.LoadLocalTarget(videoTargetControllers[i].m_data.targetUid,ReloadLocalDataHandle,()=>{
+                    MobileFunction.DebugByAndroid("密码错误");
+                });
+                MobileFunction.DebugByAndroid("获取到该对象");
+            }
+        }
+        MobileFunction.DebugByAndroid("没有获取到该对象");
+    }
+    void ReloadLocalDataHandle(VideoTargetDate data)
+    {
+        for (int i = 0; i < videoTargetControllers.Count; i++)
+        {
+            if (videoTargetControllers[i].m_data.id == data.id)
+            {
+                videoTargetControllers[i].UpdateData(data);
+            }
+        }
     }
 }

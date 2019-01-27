@@ -19,7 +19,7 @@ public class CloudARImageTargetBehaviour : ImageTargetBaseBehaviour
 
 	void OnTargetFound(TargetAbstractBehaviour behaviour)
 	{
-        MobileFunction.OnCloudIdentifySuccess(gameObject.name);
+        //MobileFunction.OnCloudIdentifySuccess(gameObject.name);
 
 	}
 

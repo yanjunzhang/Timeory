@@ -87,6 +87,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 		App.MgrPrefab.Create (_gameObj,"VideoTarget", Vector3.zero, (gameObj)=>{
 			
 			gameObj.GetComponentInChildren<VideoTargetController> ().Init (data);
+            gameObj.GetComponentInChildren<VideoTargetController>().imageTarget = imageTarget;
 		});
 
 

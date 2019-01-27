@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ARCloud/Scenes/CloudAR.unity
+- path: Assets/ARCloud/Scenes/LocalAR.unity
   isLoaded: 1
   isActive: 1
