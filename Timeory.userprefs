@@ -1,20 +1,14 @@
 ﻿<Properties StartupConfiguration="{174AF6CA-5D76-F985-E713-3F4DF7BC967F}|">
   <MonoDevelop.Ide.ItemProperties.Timeory PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Timeory/CloudAR/CloudARManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Timeory/CloudAR/UIManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="50" Column="1" />
+      <File FileName="Assets/Scripts/Main/MgrPost.cs" Line="133" Column="1" />
       <File FileName="Assets/Scripts/Main/MgrDownload.cs" Line="113" Column="14" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="83" Column="14" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARVideoTargetBehaviour.cs" Line="8" Column="14" />
-      <File FileName="Assets/Scripts/Timeory/MobileFunction.cs" Line="41" Column="68" />
-      <File FileName="Assets/Scripts/Timeory/AndroidMethod.cs" Line="17" Column="5" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARManager.cs" Line="88" Column="59" />
-      <File FileName="Assets/Scripts/Main/MgrLevel.cs" Line="51" Column="33" />
-      <File FileName="Assets/Scripts/Timeory/UIPolygon.cs" Line="1" Column="1" />
-      <File FileName="Assets/Quibos/QuitApp/QuitApp.cs" Line="1" Column="1" />
-      <File FileName="Assets/Quibos/QuitApp/HideAndroidButtons.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARImageTargetBehaviour.cs" Line="22" Column="11" />
-      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="126" Column="80" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/VideoTargetController.cs" Line="339" Column="43" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/UIManager.cs" Line="41" Column="15" />
+      <File FileName="Assets/Scripts/Timeory/AndroidMethod.cs" Line="31" Column="27" />
+      <File FileName="Assets/Scripts/Timeory/MobileFunction.cs" Line="51" Column="43" />
+      <File FileName="Assets/Scripts/Timeory/CloudAR/CloudARCloudBehaviour.cs" Line="66" Column="43" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

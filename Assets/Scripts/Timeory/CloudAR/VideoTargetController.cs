@@ -332,7 +332,13 @@ public class VideoTargetController : MonoBehaviour {
         GameObject.FindObjectOfType<UIManager>().DebugToUI("Add Video: " + userId);
         try
         {
-            MobileFunction.AddVideoIntoCloudSpace(userId);
+            if (isCloud)
+            {
+                MobileFunction.AddVideoIntoCloudSpace(userId);
+            }else{
+                MobileFunction.AddVideoIntoLocalSpace(userId);
+            }
+
         }
         catch (System.Exception ex)
         {
@@ -406,6 +412,7 @@ public class VideoTargetController : MonoBehaviour {
         transform.SetParent(cloudArManager.transform);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        btns[4].DOScale(0, 1f);//切换模式按钮
     }
     //恢复AR模式 
     public void SetToCardMode()
@@ -414,6 +421,7 @@ public class VideoTargetController : MonoBehaviour {
         transform.SetParent(ARCardTarget.transform);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;  
+        btns[4].DOScale(1, 1f);//切换模式按钮
     }
     void OnTargetFound(TargetAbstractBehaviour behaviour)
     {

@@ -14,15 +14,35 @@ public class UIManager : MonoBehaviour {
     public CloudARManager m_manager;
     public InputField inputField;
     public Text debugPanel;
+    public Transform scaner;
     bool isFlashOpen;
+    bool isScanerStoped;
 	// Use this for initialization
 	void Start () {
-		
-	}
+		//扫描UI旋转
+        scaner.GetChild(0).DORotate(new Vector3(0, 0, 360f), 1.4f).SetEase(Ease.Linear).SetLoops(-1,LoopType.Restart).SetRelative();
+        scaner.GetChild(1).DORotate(new Vector3(0, 0, 360f), 1.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).SetRelative();
+        scaner.GetChild(2).DORotate(new Vector3(0, 0, 360f), 1.8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).SetRelative();
+        scaner.GetChild(3).DORotate(new Vector3(0, 0, -360f), 2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).SetRelative();
+    }
     private void Update()
     {
 
     }
+
+    public void StopScanerRotate()
+    {
+        if (!isScanerStoped)
+        {
+            isScanerStoped = true;
+            //取消屏幕闪烁
+            Camera.main.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetInt("_IsScaning", 0);
+            //停止扫描UI的旋转
+            scaner.gameObject.SetActive(false);
+        }
+    }
+
+
     public void DebugToUI(string str)
     {
         debugPanel.text = str;
@@ -59,6 +79,7 @@ public class UIManager : MonoBehaviour {
         passwordPanel.gameObject.SetActive(false);
         passwordBtn.gameObject.SetActive(true);
         inputField.text = "";
+
     }
     //输入密码关闭按钮的点击
     public void OnPasswordCloseBtnClick()
@@ -104,9 +125,9 @@ public class UIManager : MonoBehaviour {
         GameObject _gameObj = new GameObject(data.targetUid);
         _gameObj.transform.localPosition = Vector3.zero;
         var targetBehaviour = _gameObj.AddComponent<CloudARVideoTargetBehaviour>();
-        //targetBehaviour.TargetFound += OnTargetFound;
+        targetBehaviour.TargetFound += OnTargetFound;
         targetBehaviour.Bind(tracker);
-        targetBehaviour.SetupWithImage(data.timeImgSrc, StorageType.Absolute, data.targetUid, Vector2.one*10f);
+        targetBehaviour.SetupWithImage(data.timeImgSrc, StorageType.Absolute, data.targetUid, Vector2.one*12f);
         App.MgrPrefab.Create(_gameObj, "VideoTarget", Vector3.zero, (gameObj) => {
             gameObj.GetComponentInChildren<VideoTargetController>().Init(data,false);
         });
@@ -115,18 +136,7 @@ public class UIManager : MonoBehaviour {
     }
     void OnTargetFound(TargetAbstractBehaviour behaviour)
     {
-        
-try
-        {
-            VideoTargetController target = behaviour.gameObject.GetComponentInChildren<VideoTargetController>();
-            MobileFunction.OnLocalIdentifySuccess(target.m_data.videoList[target.selectedNumber].userId,target.m_data.videoList[target.selectedNumber].isVertical);
-        }
-        catch (System.Exception ex)
-        {
-           //GameObject.FindObjectOfType<UIManager>().DebugToUI(ex.ToString());
-        }
-
-
-
+        //停止旋转
+        StopScanerRotate();
     }
 }

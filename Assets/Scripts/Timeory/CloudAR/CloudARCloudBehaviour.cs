@@ -11,7 +11,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 	private ImageTrackerBaseBehaviour trackerBehaviour;
 	private string persistentDataPath;
 	public bool SaveNewTarget;
-	public GameObject manager;
+    public UIManager m_ui;
 
 
 	private void Awake()
@@ -63,6 +63,8 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 
 			//从后台获取数据
 			App.MgrPost.Load(imageTarget,InitVideoCardTarget);
+            //取消扫描状态
+            m_ui.StopScanerRotate();
 		}
 	}
 	string MetaToString(string meta)
