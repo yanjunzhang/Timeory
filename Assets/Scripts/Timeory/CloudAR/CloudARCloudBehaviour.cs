@@ -63,8 +63,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 
 			//从后台获取数据
 			App.MgrPost.Load(imageTarget,InitVideoCardTarget);
-            //取消扫描状态
-            m_ui.StopScanerRotate();
+
 		}
 	}
 	string MetaToString(string meta)
@@ -86,6 +85,7 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 		if (!targetBehaviour.SetupWithTarget(imageTarget))
 			return;
 		targetBehaviour.Bind(trackerBehaviour);
+        targetBehaviour.TargetFound += OnTargetFound;
 		App.MgrPrefab.Create (_gameObj,"VideoTarget", Vector3.zero, (gameObj)=>{
 			
 			gameObj.GetComponentInChildren<VideoTargetController> ().Init (data);
@@ -94,4 +94,11 @@ public class CloudARCloudBehaviour :CloudRecognizerBehaviour {
 
 
 	}
+    void OnTargetFound(TargetAbstractBehaviour behaviour)
+    {
+        //m_ui.DebugToUI("取消扫描状态");
+        //取消扫描状态
+        m_ui.StopScanerRotate();
+    }
+
 }

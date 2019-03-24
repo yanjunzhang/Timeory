@@ -24,17 +24,18 @@ public class MgrPost : MonoBehaviour {
 
     IEnumerator LoadLocalImageTarget(string pwd,System.Action<VideoTargetDate> handle,System.Action errorHandle)
     {
-        Debug.Log(pwd);
+        
         Dictionary<string, string> headers = new Dictionary<string, string>();
 
-        headers.Add("Content-Type", "application/json");
-
+        //headers.Add("Content-Type", "application/json");
+        headers.Add("token", App.MgrConfig._token);
 
         JsonData data = new JsonData();
         data["password"] = pwd;
+        data["id"] = App.MgrConfig._id;
         byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
 
-        WWW www = new WWW("http://106.14.60.213:8080/business/AR/local", bs, headers);
+        WWW www = new WWW(App.MgrConfig._Server+"AR/local", bs, headers);
         yield return www;
         Debug.Log(www.text);
         string m_info = string.Empty;
@@ -65,6 +66,7 @@ public class MgrPost : MonoBehaviour {
             string s = jd["data"]["timesImgSrc"].ToString();
             string id = jd["data"]["id"].ToString();
             s = App.MgrDownload.DownloadLocalARImg(s);
+
             VideoTargetDate _data = new VideoTargetDate(pwd,"",id, s);
 
             jd = jd["data"]["timeLineVideoList"];
@@ -83,9 +85,19 @@ public class MgrPost : MonoBehaviour {
             }
 
             Debug.Log(_data.videoList.Count);
-            MobileFunction.DebugByAndroid("视频数量: "+_data.videoList.Count);
+            try
+            {
+                MobileFunction.DebugByAndroid("视频数量: " + _data.videoList.Count);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             yield return new WaitForSeconds(1f);
-            handle(_data);
+            if(handle!=null)
+                handle(_data);
+            
         }
 
     }
@@ -109,12 +121,14 @@ public class MgrPost : MonoBehaviour {
 		byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
 		*/
 		//WWW www = new WWW("http://106.14.60.213:8080/business/AR/cloud", bs, headers);
-
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("token", App.MgrConfig._token);
 		WWWForm wwwForm = new WWWForm ();
-		wwwForm.AddField ("phone", "13816848999");
+        wwwForm.AddField ("phone", App.MgrConfig._phone);
 		wwwForm.AddField ("targetId", target.Uid);
 		wwwForm.AddField ("token", "");
-		WWW www = new WWW("http://106.14.60.213:8080/business/AR/cloud",wwwForm);
+        byte[] rawData = wwwForm.data;
+        WWW www = new WWW(App.MgrConfig._Server +"AR/cloud",rawData,headers);
 		yield return www;
 		string m_info = string.Empty;
 

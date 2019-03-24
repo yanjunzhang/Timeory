@@ -141,7 +141,7 @@ public class VideoTargetController : MonoBehaviour {
         //vPlayer = GetComponentInChildren<EasyAR.VideoPlayerBehaviour>();、
         vPlayer.Stop();
         vPlayer.Path = path;
-        GameObject.FindObjectOfType<UIManager>().DebugToUI("video Path : "+path);
+        //GameObject.Find("UI").GetComponent<UIManager>().DebugToUI("video Path : "+path);
         vPlayer.Open();
         PlayVideo();
         
@@ -183,30 +183,51 @@ public class VideoTargetController : MonoBehaviour {
             //GameObject.FindObjectOfType<UIManager>().DebugToUI("reachEnd");
             //停止播放
             //PauseVideo();
+            //如果是第一次就展开动画
+            if (isFirst)
+            {
+                StopCoroutine("IE_Spreadout");
+                StartCoroutine("IE_Spreadout");
+            }
         };
         RefreshUI();
+
+        UIManager._instance.DebugToUI("videoPlayer path: "+ARCardTarget.Path);
     }
 
     void OnTargetFound_First(TargetAbstractBehaviour behaviour)
     {
-        //如果是第一次就展开动画
         if (isFirst)
-        {
-            StopCoroutine("IE_Spreadout");
-            StartCoroutine("IE_Spreadout");
+        { 
+            bg.GetComponent<UnityEngine.UI.Image>().DOFillAmount(1f, 1f).ChangeStartValue(0.1f);
+            App.MgrAudio.Play("open");
         }
+
     }
 
     IEnumerator IE_Spreadout()
     {
-        bg.GetComponent<UnityEngine.UI.Image>().DOFillAmount(1f, 1f).ChangeStartValue(0.1f);
-        App.MgrAudio.Play("open");
+        
+        ui_userlogo.transform.DOScale(0.5f,0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
         yield return new WaitForSeconds(0.3f);
+        btns[5].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        yield return new WaitForSeconds(0.3f);
+        btns[0].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        btns[1].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        yield return new WaitForSeconds(0.3f);
+        btns[2].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        yield return new WaitForSeconds(0.3f);
+        btns[3].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        yield return new WaitForSeconds(0.3f);
+        btns[4].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        yield return new WaitForSeconds(0.3f);
+        /*
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
             yield return new WaitForSeconds(0.3f);
         }
+        */
         isFirst = false;
     }
 
@@ -261,9 +282,9 @@ public class VideoTargetController : MonoBehaviour {
 
         if (m_data.videoList[selectedNumber].isFriend)
         {
-            btns[2].gameObject.SetActive(false);
-        }else
             btns[2].gameObject.SetActive(true);
+        }else
+            btns[2].gameObject.SetActive(false);
         //更新用户信息
         Debug.Log("当前选择： "+selectedNumber);
         VideoTargetCell currCell = m_data.videoList[selectedNumber];
@@ -393,6 +414,7 @@ public class VideoTargetController : MonoBehaviour {
         //vPlayer.transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
         transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
         transform.localPosition = new Vector3(0, 0, 0);
+
     }
     //切换到立体模式
     void TurnARMode()
@@ -412,16 +434,19 @@ public class VideoTargetController : MonoBehaviour {
         transform.SetParent(cloudArManager.transform);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        btns[4].DOScale(0, 1f);//切换模式按钮
+        //btns[4].DOScale(0, 1f);//切换模式按钮
+        btns[4].GetComponent<UnityEngine.UI.Image>().DOFade(0, 1f);
+        //显示重新识别按钮
+        FindObjectOfType<UIManager>().rescan.SetActive(true);
     }
     //恢复AR模式 
     public void SetToCardMode()
     {
-        
         transform.SetParent(ARCardTarget.transform);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;  
-        btns[4].DOScale(1, 1f);//切换模式按钮
+        //btns[4].DOScale(1, 1f);//切换模式按钮
+        btns[4].GetComponent<UnityEngine.UI.Image>().DOFade(1f, 1f);
     }
     void OnTargetFound(TargetAbstractBehaviour behaviour)
     {
@@ -449,32 +474,34 @@ public class VideoTargetController : MonoBehaviour {
 
     void TurnToTallMode()
     {
-        btns[0].DOLocalMove(new Vector3(24f,534f,0),1f);//返回
-        btns[1].DOLocalMove(new Vector3(111f,536f,0),1f);//下一个
-        btns[2].DOLocalMove(new Vector3(190f, 506f, 0), 1f);//添加好友
-        btns[3].DOLocalMove(new Vector3(279f, 507f, 0), 1f);//3添加视频
-        btns[4].DOLocalMove(new Vector3(368f, 509f, 0), 1f);//4切换模式
-        btns[5].DOLocalMove(new Vector3(321f, -131f, 0), 1f);//5日期
+        btns[0].DOLocalMove(new Vector3(-70f,200f,0),1f);//返回
+        btns[1].DOLocalMove(new Vector3(470f,200f,0),1f);//下一个
+        btns[2].DOLocalMove(new Vector3(171f, 510f, 0), 1f);//添加好友
+        btns[3].DOLocalMove(new Vector3(255f, 510f, 0), 1f);//3添加视频
+        btns[4].DOLocalMove(new Vector3(339f, 510f, 0), 1f);//4切换模式
+        btns[5].DOLocalMove(new Vector3(255f, -132f, 0), 1f);//5日期
         //头像 昵称
-        ui_userlogo.transform.DOLocalMove(new Vector3(32f, 445f, 0), 1f);
-        ui_nickName.transform.DOLocalMove(new Vector3(157f,440f,0),1f);
+        ui_userlogo.transform.DOLocalMove(new Vector3(12f, -139f, 0), 1f);
+        //ui_nickName.transform.DOLocalMove(new Vector3(157f,440f,0),1f);
 
         BGWide.gameObject.SetActive(false);
         BGTall.gameObject.SetActive(true);
+        bg = BGTall;
     }
     void TurnToWideMode()
     {
-        btns[0].DOLocalMove(new Vector3(-51f, 437f, 0), 1f);
-        btns[1].DOLocalMove(new Vector3(57f, 437f, 0), 1f);
-        btns[2].DOLocalMove(new Vector3(190, 391.9f, 0), 1f);//添加好友
-        btns[3].DOLocalMove(new Vector3(279f, 393f, 0), 1f);//3添加视频
-        btns[4].DOLocalMove(new Vector3(368f, 393f, 0), 1f);//4切换模式
-        btns[5].DOLocalMove(new Vector3(321f, -49f, 0), 1f);//5日期
+        btns[0].DOLocalMove(new Vector3(-150f, 200f, 0), 1f);
+        btns[1].DOLocalMove(new Vector3(550f, 200f, 0), 1f);
+        btns[2].DOLocalMove(new Vector3(161f, 418f, 0), 1f);//添加好友
+        btns[3].DOLocalMove(new Vector3(252f, 418f, 0), 1f);//3添加视频
+        btns[4].DOLocalMove(new Vector3(339f, 418f, 0), 1f);//4切换模式
+        btns[5].DOLocalMove(new Vector3(255f, -35f, 0), 1f);//5日期
         //头像 昵称
-        ui_userlogo.transform.DOLocalMove(new Vector3(-49.2f, 356.6f, 0), 1f);
-        ui_nickName.transform.DOLocalMove(new Vector3(69.9f, 353.2f, 0), 1f);
+        ui_userlogo.transform.DOLocalMove(new Vector3(12f, -34f, 0), 1f);
+        //ui_nickName.transform.DOLocalMove(new Vector3(69.9f, 353.2f, 0), 1f);
 
         BGWide.gameObject.SetActive(true);
         BGTall.gameObject.SetActive(false);
+        bg = BGWide;
     }
 }

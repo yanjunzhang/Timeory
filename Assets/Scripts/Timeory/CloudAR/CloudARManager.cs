@@ -12,8 +12,10 @@ public class CloudARManager : MonoBehaviour {
     public CloudARCloudBehaviour cloudReconginzer;
     //public List<Transform> targets;
     public List<VideoTargetController> videoTargetControllers;
+    public UIManager m_uiManager;
 	// Use this for initialization
 	void Start () {
+
 	}
 	
 	// Update is called once per frame
@@ -31,6 +33,8 @@ public class CloudARManager : MonoBehaviour {
     //所有target取消脱卡
     public void SetToCardMode()
     {
+        //关闭重新识别按钮
+        FindObjectOfType<UIManager>().rescan.SetActive(false);
         for (int i = 0; i < videoTargetControllers.Count; i++)
         {
             videoTargetControllers[i].SetToCardMode();
@@ -51,7 +55,7 @@ public class CloudARManager : MonoBehaviour {
     public void ClearAllTarget()
     {
         SetToCardMode();
-
+        m_uiManager.StartScanerRotate();
     }
 
     public void ReloadVideoTargetData(string id)

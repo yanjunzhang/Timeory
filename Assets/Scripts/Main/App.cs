@@ -17,7 +17,9 @@ public class App : MonoBehaviour
 
 	public string _key;
 	public string _Server;
-	public string m_Secret;
+	public string _token;
+    public string _id;
+    public string _phone;
 
 
 	#endregion

@@ -6,6 +6,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
+    public static UIManager _instance;
     public Transform passwordPanel;
     public Transform passwordBtn;
     public Transform cantAddVideoPanel;
@@ -15,10 +16,14 @@ public class UIManager : MonoBehaviour {
     public InputField inputField;
     public Text debugPanel;
     public Transform scaner;
+    public UnityEngine.UI.Image image;
+    public Sprite[] flash;
+    public GameObject rescan;
     bool isFlashOpen;
     bool isScanerStoped;
 	// Use this for initialization
 	void Start () {
+        _instance = this;
 		//扫描UI旋转
         scaner.GetChild(0).DORotate(new Vector3(0, 0, 360f), 1.4f).SetEase(Ease.Linear).SetLoops(-1,LoopType.Restart).SetRelative();
         scaner.GetChild(1).DORotate(new Vector3(0, 0, 360f), 1.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).SetRelative();
@@ -30,18 +35,35 @@ public class UIManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// 停止扫描中，并且显示重新识别按钮
+    /// </summary>
     public void StopScanerRotate()
     {
         if (!isScanerStoped)
         {
             isScanerStoped = true;
-            //取消屏幕闪烁
-            Camera.main.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetInt("_IsScaning", 0);
             //停止扫描UI的旋转
             scaner.gameObject.SetActive(false);
+            //显示重新识别
+            //rescan.SetActive(true);
         }
     }
 
+    /// <summary>
+    /// 重新开始扫描中  隐藏重新识别
+    /// </summary>
+    public void StartScanerRotate()
+    {
+        if (isScanerStoped)
+        {
+            isScanerStoped = false;
+            //停止扫描UI的旋转
+            scaner.gameObject.SetActive(true);
+            //隐藏重新识别
+            rescan.SetActive(false);
+        }
+    }
 
     public void DebugToUI(string str)
     {
@@ -50,7 +72,14 @@ public class UIManager : MonoBehaviour {
     //打开密码
     public void OnPasswordBtnClick()
     {
-        MobileFunction.PopUpPasswordDialog("btn Click");
+        try
+        {
+            MobileFunction.PopUpPasswordDialog("btn Click");
+        }
+        catch (System.Exception ex)
+        {
+
+        }
         //passwordBtn.gameObject.SetActive(false);
         //passwordPanel.gameObject.SetActive(true);
         //取消识别 删除所有target
@@ -61,6 +90,16 @@ public class UIManager : MonoBehaviour {
     {
         isFlashOpen = !isFlashOpen;
         ARBuilder.Instance.CameraDeviceBehaviours[0].SetFlashTorchMode(isFlashOpen);
+        if (isFlashOpen)
+        {
+            //闪光灯打开状态时
+            image.sprite = flash[1];
+            image.SetNativeSize();
+        }else{
+            //闪光灯关闭时
+            image.sprite = flash[0];
+            image.SetNativeSize();
+        }
     }
     //退出
     public void OnQuitBtnClick()

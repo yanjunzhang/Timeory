@@ -18,6 +18,8 @@ public class MgrDownload : MonoBehaviour
         }
         else*/
             path = Application.persistentDataPath;
+
+
     }
 	// Use this for initialization
 	void Start () {
@@ -27,10 +29,7 @@ public class MgrDownload : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DownloadLocalARImg("http://oss.timeory.com/Business/App/Scan/Img/ar1.jpg");
-        }
+
     }
     string GetNameFromUrl(string url)
     {
