@@ -188,6 +188,7 @@ public class VideoTargetController : MonoBehaviour {
             {
                 StopCoroutine("IE_Spreadout");
                 StartCoroutine("IE_Spreadout");
+                isFirst = false;
             }
         };
         RefreshUI();
@@ -214,8 +215,11 @@ public class VideoTargetController : MonoBehaviour {
         yield return new WaitForSeconds(0.3f);
         btns[0].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
         btns[1].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
-        yield return new WaitForSeconds(0.3f);
-        btns[2].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        if (!isCloud&&m_data.id!="1")
+        {
+            yield return new WaitForSeconds(0.3f);
+            btns[2].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
+        }
         yield return new WaitForSeconds(0.3f);
         btns[3].DOScale(1f, 0.5f).SetEase(Ease.OutBack).ChangeStartValue(Vector3.zero);
         yield return new WaitForSeconds(0.3f);
@@ -280,7 +284,7 @@ public class VideoTargetController : MonoBehaviour {
             SetArrowBtn(true,false);
         }
 
-        if (m_data.videoList[selectedNumber].isFriend)
+        if (m_data.videoList[selectedNumber].isFriend&&!isCloud)
         {
             btns[2].gameObject.SetActive(true);
         }else
@@ -406,7 +410,14 @@ public class VideoTargetController : MonoBehaviour {
         isPlaneMode = !isPlaneMode;
 
     }
+    /// <summary>
+    /// 停止视频的播放
+    /// </summary>
+    public void ResetVideo()
+    {
+        vPlayer.Seek(0);
 
+    }
     //切换到平面模式
     void TurnPlaneMode()
     {
@@ -432,7 +443,13 @@ public class VideoTargetController : MonoBehaviour {
         cam.position = Vector3.zero;
         cam.rotation = Quaternion.identity;
         transform.SetParent(cloudArManager.transform);
-        transform.localPosition = Vector3.zero;
+        if (isCloud)
+        {
+            transform.localPosition = new Vector3(0, -30f, 0);
+        }
+        else
+            transform.localPosition = Vector3.zero;
+
         transform.localRotation = Quaternion.identity;
         //btns[4].DOScale(0, 1f);//切换模式按钮
         btns[4].GetComponent<UnityEngine.UI.Image>().DOFade(0, 1f);

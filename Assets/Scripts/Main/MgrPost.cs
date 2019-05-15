@@ -27,14 +27,15 @@ public class MgrPost : MonoBehaviour {
         
         Dictionary<string, string> headers = new Dictionary<string, string>();
 
-        //headers.Add("Content-Type", "application/json");
-        headers.Add("token", App.MgrConfig._token);
+        headers.Add("Content-Type", "application/json");
+        //headers.Add("token", App.MgrConfig._token);
 
         JsonData data = new JsonData();
         data["password"] = pwd;
         data["id"] = App.MgrConfig._id;
-        byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
-
+        //byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
+        byte[] bs = System.Text.Encoding.UTF8.GetBytes(data.ToJson());
+        Debug.Log(data.ToJson());
         WWW www = new WWW(App.MgrConfig._Server+"AR/local", bs, headers);
         yield return www;
         Debug.Log(www.text);
@@ -119,16 +120,29 @@ public class MgrPost : MonoBehaviour {
 		data["targetId"] = "920df90c-dbb4-41bf-ab70-b2bc14c189c1";
 		data["token"] = "";
 		byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
-		*/
+
 		//WWW www = new WWW("http://106.14.60.213:8080/business/AR/cloud", bs, headers);
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("token", App.MgrConfig._token);
+        
+        //headers.Add("token", App.MgrConfig._token);
+*/
 		WWWForm wwwForm = new WWWForm ();
         wwwForm.AddField ("phone", App.MgrConfig._phone);
 		wwwForm.AddField ("targetId", target.Uid);
 		wwwForm.AddField ("token", "");
         byte[] rawData = wwwForm.data;
-        WWW www = new WWW(App.MgrConfig._Server +"AR/cloud",rawData,headers);
+        WWW www = new WWW(App.MgrConfig._Server + "AR/cloud",wwwForm);
+/*
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Content-Type", "application/json");
+        JsonData jsonData = new JsonData();
+        jsonData["phone"] = App.MgrConfig._phone;
+        jsonData["targetId"] = target.Uid;
+        Debug.Log(jsonData.ToJson());
+        //byte[] bs = System.Text.UTF8Encoding.UTF8.GetBytes(data.ToJson());
+        byte[] bs = System.Text.Encoding.UTF8.GetBytes(jsonData.ToJson());
+
+        WWW www = new WWW(App.MgrConfig._Server +"AR/cloud",bs,headers);
+        */
 		yield return www;
 		string m_info = string.Empty;
 

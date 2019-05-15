@@ -38,6 +38,7 @@ public class CloudARManager : MonoBehaviour {
         for (int i = 0; i < videoTargetControllers.Count; i++)
         {
             videoTargetControllers[i].SetToCardMode();
+            videoTargetControllers[i].ResetVideo();
         }
     }
 
